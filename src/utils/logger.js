@@ -22,10 +22,10 @@ const logger = createLogger({
   ],
 });
 
-exports.log = (content, type = 'log') => {
+exports.log = (content, level = "info", type = 'log') => {
   switch(type) {
     case 'log':
-      logger.log({level: "info",message: `${content}`})
+      logger.log({level: level,message: `${content}`})
       webhook(process.env.WEBHOOK_LINK, {title: "LOG - Error", color: process.env.LOGGING_COLOR_ERROR, info: content})
       break;
     case 'error':
