@@ -1,0 +1,29 @@
+{
+  "name": "fileupload",
+  "version": "1.0.0",
+  "description": "File Uploader for CyciOrg",
+  "main": "ecosystem.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyciorg/FileUpload.git"
+  },
+  "keywords": [
+    "File",
+    "Uploader"
+  ],
+  "author": "DopeDealers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cyciorg/FileUpload/issues"
+  },
+  "homepage": "https://github.com/cyciorg/FileUpload#readme",
+  "dependencies": {
+    "mysql": "^2.18.1",
+    "simple-encryptor": "^4.0.0",
+    "winston": "^3.3.3",
+    "wumpfetch": "^0.3.1"
+  }
+}
