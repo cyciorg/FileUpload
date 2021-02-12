@@ -8,6 +8,7 @@ function routes() {
     logger.log("Adding routes")
     app.use('trust proxy');
     app.use('/api/v1', require('./routes/api'))
+    app.use(express.static(path.join(__dirname, 'public')));
 }
 
 routes();
