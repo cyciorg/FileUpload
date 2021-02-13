@@ -10,7 +10,7 @@ async function sendWebhook(webhook, { title = "LOG - Default", color = "", info 
   this.options = {title, color, info}
   if (!this.options) throw new Error("Options null.");
 
-    const r = await w({
+    await w({
         url: webhook,
         method: 'POST',
         headers: {
