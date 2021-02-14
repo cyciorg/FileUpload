@@ -108,3 +108,7 @@ docker-compose.yml
 *.config.js
 *.sql
 test.js
+testingimg.jpg
+
+# build dir
+build/
