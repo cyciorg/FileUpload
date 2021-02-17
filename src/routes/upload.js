@@ -30,18 +30,17 @@ router.post('/upload', async function(req, res) {
               files.cyci = files.cyciUploader;
           } else {
             logger.error(`Non sharex upload requested by ${ip} - ${data[0].name}/${who}`)
-            res.json({error: `Not using Sharex Uploader`})
-            return;
+            return res.json({error: `Not using Sharex Uploader`})
           }
             s3A.uploadImage(data[0].id, files.cyci.name, files.cyci.path).then((file) => {
               logger.log(`${file} uploaded by ${ip} - ${who}`);
               let checkIfImg = JSON.parse(data[0].fileLink);
               if (!checkIfImg.includes(file)) {
                 db.query(`UPDATE userData SET fileLink=COALESCE(JSON_ARRAY_APPEND(fileLink, '$', '${file}'), JSON_ARRAY('${file}'))`);
-                return;
+                return res.end();
               }
             }).catch((err) => {
-              logger.error(err);
+              return logger.error(err);
             })
           });
       });
