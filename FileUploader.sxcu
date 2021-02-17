@@ -1,15 +1,14 @@
 ﻿{
   "Version": "12.4.0",
-  "Name": "URL_Shortener",
-  "DestinationType": "FileUploader",
+  "Name": "ImageUploader",
+  "DestinationType": "ImageUploader, FileUploader",
   "RequestMethod": "POST",
   "RequestURL": "https://cyci.rocks/api/v1/upload",
   "Headers": {
-    "url": "$input$",
-    "userid": "your_15_long_user_id"
+    "userid": "576688747481743"
   },
    "Arguments": {
-    "key": "YOUR_PASSWORD"
+    "key": "vskA7cqFIhKrw1YEpYGChhhZulwdqMON5jXrMJWd"
   },
   "Body": "MultipartFormData"
   "FileFormName": "cyciUploader"

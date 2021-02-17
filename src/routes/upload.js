@@ -27,7 +27,7 @@ router.post('/upload', async function(req, res) {
           if (!s3A.checkIfUserExists(data[0].id)) return logger.error(`Unauthorized request to \`/UPLOAD/\` by ${ip} - ${who}`), res.json({error: `Unauthorized request`});
           // line taken from old project called ShareS
           let sharex = false;
-          if (files.cyciUploader && !fields.key) {
+          if (files.cyciUploader && fields.key) {
               sharex = true;
               files.cyci = files.cyciUploader;
           } else {
