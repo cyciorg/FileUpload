@@ -10,5 +10,5 @@
     "Authorization: "Your API Token"
   },
   "Body": "MultipartFormData"
-  "FileFormName": "cyci"
+  "FileFormName": "cyciUploader"
 }
