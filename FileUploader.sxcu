@@ -6,8 +6,10 @@
   "RequestURL": "https://cyci.rocks/api/v1/upload",
   "Headers": {
     "url": "$input$",
-    "userid": "your_15_long_user_id".
-    "Authorization: "Your API Token"
+    "userid": "your_15_long_user_id"
+  },
+   "Arguments": {
+    "key": "YOUR_PASSWORD"
   },
   "Body": "MultipartFormData"
   "FileFormName": "cyciUploader"
