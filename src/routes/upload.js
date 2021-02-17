@@ -38,12 +38,13 @@ router.post('/upload', async function(req, res) {
             s3A.uploadImage(data[0].id, files.cyci.name, files.cyci.path).then((file) => {
               logger.log(`${file} uploaded by ${ip} - ${who}`);
               let checkIfImg = JSON.parse(data[0].fileLink);
-              if (checkIfImg.includes(file)) return res.json({url: "https://" + file}) && res.end();
-              else
+              if (checkIfImg.includes(file)) return res.json({url: "https://" + file});
+              else {
               db.query(`UPDATE userData SET fileLink=COALESCE(JSON_ARRAY_APPEND(fileLink, '$', '${file}'), JSON_ARRAY('${file}'))`);
               res.json({url: "https://" + file});
               res.end();
               return;
+              }
             }).catch((err) => {
               logger.error(err);
             })
