@@ -39,7 +39,7 @@ router.post('/upload', async function(req, res) {
               logger.log(`${file} uploaded by ${ip} - ${who}`);
               let checkIfImg = JSON.parse(data[0].fileLink);
               if (checkIfImg.includes(file)) return res.json({url: "https://" + file});
-              else {
+              else if (checkIfImg.includes(file) == null) {
               db.query(`UPDATE userData SET fileLink=COALESCE(JSON_ARRAY_APPEND(fileLink, '$', '${file}'), JSON_ARRAY('${file}'))`);
               res.json({url: "https://" + file});
               res.end();
