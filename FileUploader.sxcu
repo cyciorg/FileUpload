@@ -1,0 +1,14 @@
+﻿{
+  "Version": "12.4.0",
+  "Name": "URL_Shortener",
+  "DestinationType": "FileUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "https://cyci.rocks/api/v1/upload",
+  "Headers": {
+    "url": "$input$",
+    "userid": "your_15_long_user_id".
+    "Authorization: "Your API Token"
+  },
+  "Body": "MultipartFormData"
+  "FileFormName": "cyci"
+}

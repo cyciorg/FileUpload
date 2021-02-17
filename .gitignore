@@ -112,3 +112,6 @@ testingimg.jpg
 
 # build dir
 build/
+
+# Conf files
+*.conf

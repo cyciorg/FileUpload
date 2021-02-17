@@ -40,13 +40,13 @@ class AmazonCDN {
      * @param {Int} userId
      */
     async checkIfUserExists(userId) {
-      if (!parseInt(userId)) return;
-      const paramFolder = {Bucket: process.env.AWSS3_BUCKET,Key: `${userId}/`}
-      const data = await this._s3.listObjectsV2(paramFolder).promise();
-          const folderExists = data.Contents.length > 0;
+      const paramFolder = {Bucket: process.env.AWSS3_BUCKET,Prefix: `${userId}/`}
+      s3.listObjectsV2(paramFolder, function(err, data) {
+        const folderExists = data.Contents.length > 0;
           if (folderExists == true) {
             return true;
           } else return false;
+      })
     }
 }
 module.exports = AmazonCDN;
