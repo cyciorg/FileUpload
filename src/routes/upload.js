@@ -44,7 +44,7 @@ router.post('/upload', async function(req, res) {
                 logger.log(`${file} uploaded by ${ip} - ${data[0].name}/${who}`);
                 return;
             } else {
-                db.query(`UPDATE userData SET fileLink=COALESCE(JSON_ARRAY_APPEND(fileLink, '$', '${file}'), JSON_ARRAY('${file}'))`);
+                db.query(`UPDATE userData SET fileLink=COALESCE(JSON_ARRAY_APPEND(fileLink, '$', '${file}'), JSON_ARRAY('${file}')) where userid=${data[0].id}`);
                 res.json({cyciUploader: `https://${file}`}).status(200)
                 logger.log(`${file} uploaded by ${ip} - ${data[0].name}/${who}`);
                 return;
