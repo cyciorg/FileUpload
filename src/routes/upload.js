@@ -36,7 +36,9 @@ router.post('/upload', async function(req, res) {
                 logger.error(`Non sharex upload requested by ${ip} - ${data[0].name}/${who}`)
                 return res.json({error: `Not using Sharex Uploader`})
             }
-            if (!fileSettings.extensions.includes(files.cyci.name)) return logger.error(`Invalid mime-type to \`/UPLOAD/\` by ${ip} - ${data[0].name}/${who}`), res.json({error: `Invalid mime-type`});
+            const mimeFile = files.cyci.name.substring(files.cyci.name.lastIndexOf('.') + 1, files.cyci.name.length).toLowerCase();
+
+            if (!fileSettings.extensions.includes(mimeFile)) return logger.error(`Invalid mime-type to \`/UPLOAD/\` by ${ip} - ${data[0].name}/${who}`), res.json({error: `Invalid mime-type`});
             const file = await s3A.uploadImage(data[0].id, files.cyci.name, files.cyci.path);
             let checkIfImg = JSON.parse(data[0].fileLink);
            
