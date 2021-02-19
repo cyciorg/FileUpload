@@ -3,8 +3,8 @@ AWS.config.update({accessKeyId: process.env.AWSS3_ID,secretAccessKey: process.en
 s3 = new AWS.S3({apiVersion: new Date(Date.now())});
 const fs = require('fs');
 const promisify = require('util').promisify;
-const id = require('../utils/createID');
 const readFile = promisify(fs.readFile);
+var mime = require('mime-types')
 
 
 let params = {
@@ -29,8 +29,9 @@ class AmazonCDN {
         return dataS3.file;
       };
     uploadToS3(data, fileName, user) {
-        this._params.Key = `${user}/${fileName}`;
-        this._params.Body = data;
+        const fileExt = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length).toLowerCase();
+        let mimeType = mime.lookup(fileExt);
+        this._params.Key = `${user}/${fileName}`,this._params.Body = data,this._params.ContentType = mimeType;
         return {
         upload: this._s3.upload(this._params).promise(),
         file: process.env.SERVER + `/${this._params.Key}`
