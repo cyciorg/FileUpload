@@ -1,0 +1,20 @@
+<%- include('../public/partials/header', {title: "Shortener"}) %>
+
+<div class="container">
+  <div></div>
+  <form class="box">
+     <div class="field">
+        <label class="label">URL Shortener</label>
+        <div class="control">
+          <form method="POST" action="/api/v1/shorten">
+            <input id="fUrl" type="url" name="fUrl" title="URL" required>
+            <button type="submit" class="btn btn-primary">Shrink This!</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+        
+<%- include('../public/partials/footer') -%>

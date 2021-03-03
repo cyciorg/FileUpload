@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" style="margin:0;padding:0;height:100vh;overflow:hidden;">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta property="og:site_name" content="CyciUploader">
+    <meta property="og:description" content="Cyci's personal fileuploader">
+    <meta name=" theme-color" content="#7289DA">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Cyci Upload" />
+    <meta property="og:image" content="https://cdn.cyci.rocks/576688747481743/user-1.png" >
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <script type="text/javascript" src="./89723468365.js"></script>
+    <link rel='icon' href='https://cdn.cyci.rocks/576688747481743/index.svg'>
+
+    <link rel="stylesheet" href="../tempmain.css" type="text/css"/>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.18.12/dist/tsparticles.min.js"></script>
+
+    <script>
+      tsParticles
+      .loadJSON('tsparticles','./partials/particles.json')
+      .then((container) => {
+      console.log("callback - tsparticles config loaded");
+      })
+        .catch((error) => {
+            console.error(error);
+        });
+    </script>
+
+    <title>
+      <%= title %>  | Cyci Uploader
+    </title>
+</head>
+<body>
+    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+        <div id="navbarMain" class="navbar-menu">
+            <div class="navbar-start">
+              <a class="<%= title == 'Index' ? 'navbar-item is-link center is-active' : 'navbar-item center' %>" href="/">
+                Home
+              </a>
+              <a id="header-logo" href="https://cyci.rocks"></a>
+              <a class="<%= title == 'Shortener' ? 'navbar-item center is-active' : 'navbar-item center' %>" href="/shorten" style="text-decoration: none;">
+                Shortener
+              </a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="tsparticles"></div>
