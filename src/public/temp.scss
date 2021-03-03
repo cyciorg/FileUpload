@@ -1,0 +1,105 @@
+@charset "utf-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,500;1,400&display=swap');
+$family-sans-serif: "Noto Sans JP", sans-serif;
+$footer-background-color: hsl(0, 0%, 21%);
+$footer-padding: 1.5rem;
+
+.navbar-item.center {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.navbar-item {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 60px;
+    margin-right: 60px;
+  }
+  @media screen and (min-width:768px){
+      .navbar-brand-centered {
+          position: absolute;
+          left: 50%;
+          display: block;
+          width: 160px;
+          text-align: center;
+          background-color: #eee;
+      }
+      .navbar>.container .navbar-brand-centered, 
+      .navbar>.container-fluid .navbar-brand-centered {
+          margin-left: -80px;
+      }
+  }
+  
+  a.navbar-item {
+    color: #FAFAFF;
+    text-align: center;
+  }
+  
+  a.navbar-item:hover, a.navbar-item.is-active {
+      background-color: hsl(0, 1%, 36%) !important;
+      border-radius: 10% !important;
+  }
+  
+  @media screen and (min-width: 1088px) {
+    .navbar-start {
+      margin-left: auto;
+      margin-right: 150px;
+    }
+}
+
+nav.navbar {
+    height: 5.2rem !important;
+}
+.container {
+    position: relative;
+}
+#tsparticles {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+.container .main-content {
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
+}
+
+body {
+    background: linear-gradient(154deg, hsl(0, 0%, 21%), hsl(0, 1%, 36%));
+    background-size: auto;
+    padding-bottom: 20px;
+    min-height: 100% !important;
+}
+    
+.footer {
+    position: absolute;
+    bottom: 0;
+    padding: 0.4rem;
+    width: 100%;
+  }
+
+#header-logo{
+    background: url('https://cdn.cyci.rocks/576688747481743/index.svg');
+    background-size: cover;
+    width: 80px;
+    height: 80px;
+}
+
+#centerAll {
+    font-family: 'Roboto', sans-serif;
+    font-size: 500%;
+    background-color: lightcyan;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+    height: 200px;
+    line-height: 100px;
+    text-align: center;
+    bottom: 10;
+}
+
+  @import "../../node_modules/bulma/bulma.sass";

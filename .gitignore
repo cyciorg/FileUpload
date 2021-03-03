@@ -109,7 +109,6 @@ docker-compose.yml
 *.sql
 test.js
 testingimg.jpg
-*.scss
 *.css
 *.svg
 *.html
