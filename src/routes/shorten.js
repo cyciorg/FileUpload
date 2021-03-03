@@ -2,12 +2,12 @@ const express = require('express');
 const db = require('../database/mysql');
 const logger = require('../utils/logger');
 router = express.Router();
-
 async function get(req, res) {
     console.log("works");
 }
 
 async function post(req, res) {
+    console.log(req.body)
     console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     // const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,who = req.headers['user-agent'] || "Undefined (1.0.0)";
     // console.log(ip);

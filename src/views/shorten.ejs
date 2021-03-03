@@ -1,20 +1,36 @@
-<%- include('../public/partials/header', {title: "Shortener"}) %>
+<%- include('../public/partials/header', {title: "Shortener" }) %>
 
-<div class="container">
-  <div></div>
-  <form class="box">
-     <div class="field">
+  <div class="container">
+    <div></div>
+    <form class="box">
+      <div class="field">
         <label class="label">URL Shortener</label>
         <div class="control">
-          <form method="POST" action="/api/v1/shorten">
-            <input id="fUrl" type="url" name="fUrl" title="URL" required>
-            <button type="submit" class="btn btn-primary">Shrink This!</button>
-          </form>
+          <input class="input is-primary" type="text" placeholder="URL Here" id="inputURL">
+          <button class="btn btn-primary" onclick="sendData()">Shrink This!</button>
         </div>
       </div>
-    </div>
+  </div>
   </form>
-</div>
+  </div>
+  <script>
+    // thanks to Vikasdeep Singh for this oddly specific url regex test
+    function isValidURL(string) {
+      var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+      return (res !== null)
+    };
+    function sendData() {
+      var url = document.getElementById("inputURL").value;
+      if (isValidURL(url)) {
+        console.log("posting!")
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:8884/api/v1/shorten", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+          "url": url
+        }));
+      }
+    }
+  </script>
 
-        
-<%- include('../public/partials/footer') -%>
+  <%- include('../public/partials/footer') -%>
