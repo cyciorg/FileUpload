@@ -5,7 +5,7 @@ const renderTemplate = (req, res, template, data = {}) => {
     const baseData = {
       path: req.path
     };
-    res.render(template), Object.assign(baseData, data);
+    res.render(`${templateDir}${path.sep}${template}`), Object.assign(baseData, data);
 };
 
 module.exports = renderTemplate;
