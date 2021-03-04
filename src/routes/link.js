@@ -1,4 +1,5 @@
 const db = require('../database/mysql');
+const logger = require('../utils/logger');
 const renderTemplate = require('../utils/renderFile');
 async function get(req, res, next) {
     /**
