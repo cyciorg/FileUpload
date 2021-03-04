@@ -4,7 +4,7 @@ function isValidURL(string) {
     return (res !== null)
 };
 
-var el = document.getElementById("buttonIDTest");
+var el = document.getElementById("buttonSubmitID");
 el.addEventListener("click", avoidNSError, false); //Firefox
 
 function avoidNSError() {
