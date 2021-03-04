@@ -14,7 +14,7 @@ let extras = {
 const app = express();
 
 function route() {
-    //logger.log("Adding routes")
+    logger.log("Adding routes")
     app.set('trust proxy', 1);
     app.set('view engine', 'ejs');
     app.use(express.static(path.join(__dirname, 'public')));
@@ -34,5 +34,5 @@ function route() {
 }
 
 route();
-// logger.error("err");logger.log("Server started on " + process.env.SERVER_PORT);
+logger.error("err");logger.log("Server started on " + process.env.SERVER_PORT);
 app.listen(process.env.SERVER_PORT, function(err) {if (err) return })
