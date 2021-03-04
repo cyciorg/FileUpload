@@ -22,7 +22,7 @@ async function get(req, res, next) {
         const dayjs = require('dayjs')
         const timestamp = dayjs(new Date()).format("YYYY-MM-DD");
 
-        var fullIp = ip.length > 1 ? ip.join('-') : ip
+        var fullIp = ip.length > 1 ? ip.replace(', ', '-') : ip
         const entireL = `{
             '${timestamp}': {
                 '${fullIp}': {
