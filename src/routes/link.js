@@ -21,10 +21,8 @@ async function get(req, res, next) {
         res.status(301).redirect(entireLink.shorten)
         const dayjs = require('dayjs')
         const timestamp = dayjs(new Date()).format("YYYY-MM-DD");
-
         var fullIp = ip.length > 1 ? ip.replace(', ', '-') : ip
-        const entireL = `{'${timestamp}': {'${fullIp}': {who: {'${createID(20)}': '${who}'}}}}`
-        db.query(`UPDATE userData SET visits=JSON_ARRAY_APPEND(visits, '$', '{'${timestamp}': {'${fullIp}': {who: {'${createID(20)}': '${who}'}}}}') WHERE id="${entireLink.id}"`).on('error', (err)=> {
+        db.query(`UPDATE userDataShorten SET visits=JSON_ARRAY_APPEND(visits, '$', '{${timestamp}: {who: {ip: ${fullIp}, header: ${who}}}}') WHERE id="${entireLink.id}"`).on('error', (err)=> {
             console.log(err);
         })
     })
