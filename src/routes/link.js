@@ -17,6 +17,9 @@ async function get(req, res, next) {
         if (dberrShort) return logger.error(`Internal DB error ${err}`)
         var entireLink = dataShort[0]
         res.status(301).redirect(entireLink.shorten)
+        const dayjs = require('dayjs')
+        const timestamp = dayjs(new Date()).format("YYYY,MM,DD");
+        db.query(`UPDATE userData SET visits=JSON_ARRAY_APPEND(visits, '$.${timestamp}', '{'${timestamp}': {'${ip}': {'who: {${who}}}}}') WHERE id="${entireLink.id}"`)
     })
 }
 
