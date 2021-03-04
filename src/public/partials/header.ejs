@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link rel='icon' href='https://cdn.cyci.rocks/576688747481743/index.svg'>
     <link rel="stylesheet" href="../main.css" type="text/css"/>
+    <script src="../js/fixMobile.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.18.12/dist/tsparticles.min.js"></script>
 
     <script>
@@ -33,7 +34,15 @@
 </head>
 <body>
     <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+      <a role="button" class="navbar-burger" data-target="navbarMain" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
         <div id="navbarMain" class="navbar-menu">
+          <div class="navbar-brand">
+            
+          </div>
             <div class="navbar-start">
               <a class="<%= title == 'Index' ? 'navbar-item is-link center is-active' : 'navbar-item center' %>" href="/">
                 Home

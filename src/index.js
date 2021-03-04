@@ -4,7 +4,7 @@ const logger = require('./utils/logger');
 const bodyParser = require("body-parser");
 const path = require('path')
 const resfile = require('./utils/renderFile');
-const db = require('./database/mysql');
+const robots = require('express-robots-txt')
 const routes = [require('./routes/upload'), require('./routes/shorten'), require('./routes/link')]
 let extras = {
     webHookDate: null,
@@ -26,6 +26,8 @@ function route() {
     app.post(`${extras.apiText}/upload`, routes[0].post.bind(this));
     app.post(`${extras.apiText}/shorten`, routes[1].post.bind(this));
     app.get(`/shorten`, routes[1].get.bind(this))
+    // temp just to shut bots up
+    app.use(robots(__dirname + '/public/robots.txt'));
     app.get('/', function(req, res) { 
         const ip =  req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress, who = req.headers['user-agent'] || "Undefined (1.0.0)";
         logger.log(`index requested by ${ip} - ${who}`)
