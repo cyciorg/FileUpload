@@ -34,5 +34,5 @@ function route() {
 }
 
 route();
-logger.error("err");logger.log("Server started on " + process.env.SERVER_PORT);
+logger.log("Server started on " + process.env.SERVER_PORT);
 app.listen(process.env.SERVER_PORT, function(err) {if (err) return })
