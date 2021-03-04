@@ -21,15 +21,16 @@ async function get(req, res, next) {
         res.status(301).redirect(entireLink.shorten)
         const dayjs = require('dayjs')
         const timestamp = dayjs(new Date()).format("YYYY-MM-DD");
-        const entireL = `
+        const entireL = `{
             '${timestamp}': {
                 '${ip}': {
                     who: {
                         '${createID(20)}': '${who}'
                     }
                 }
-            }`
-        db.query(`UPDATE userData SET visits=JSON_ARRAY_APPEND(visits, '$', '{${entireL}}') WHERE id="${entireLink.id}"`).on('error', (err)=> {
+            }
+        }`
+        db.query(`UPDATE userData SET visits=JSON_ARRAY_APPEND(visits, '$', '${entireL}') WHERE id="${entireLink.id}"`).on('error', (err)=> {
             console.log(err);
         })
     })
