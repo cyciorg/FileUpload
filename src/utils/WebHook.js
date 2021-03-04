@@ -9,6 +9,7 @@ async function sendWebhook(webhook, { title = "LOG - Default", color = "", info 
   if (!isUrl(webhook)) return;
   this.options = {title, color, info}
   if (!this.options) throw new Error("Options null.");
+  if (process.env.ENV == "development") return;
 
     await w({
         url: webhook,

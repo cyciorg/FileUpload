@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const path = require('path')
 const resfile = require('./utils/renderFile');
 const db = require('./database/mysql');
-const routes = [require('./routes/upload'), require('./routes/shorten')]
+const routes = [require('./routes/upload'), require('./routes/shorten'), require('./routes/link')]
 let extras = {
     webHookDate: null,
     webHookCoolDown: 1500,
@@ -22,15 +22,14 @@ function route() {
     app.use(bodyParser.text());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}));
+    app.get(`/s/:urlShorten`, routes[2].get.bind(this))
     app.post(`${extras.apiText}/upload`, routes[0].post.bind(this));
     app.post(`${extras.apiText}/shorten`, routes[1].post.bind(this));
-    app.get(`/shorten`, function(req, res){resfile(req, res, "shorten.ejs")})
+    app.get(`/shorten`, routes[1].get.bind(this))
     app.get('/', function(req, res) { 
         const ip =  req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress, who = req.headers['user-agent'] || "Undefined (1.0.0)";
-        //logger.log(`index requested by ${ip} - ${who}`)
-        resfile(req, res, "index.ejs", {
-            db
-        }) 
+        logger.log(`index requested by ${ip} - ${who}`)
+        resfile(req, res, "index.ejs") 
     });
 }
 

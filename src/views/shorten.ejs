@@ -6,8 +6,9 @@
       <div class="field">
         <label class="label">URL Shortener</label>
         <div class="control">
-          <input class="input is-primary" type="text" placeholder="URL Here" id="inputURL">
-          <button class="btn btn-primary" onclick="sendData()">Shrink This!</button>
+          <input class="input is-primary" required type="url" placeholder="URL Here" id="inputURL" value="https://idfugyodf.net/uyigbdf">
+          <input class="input is-primary" required type="password" placeholder="API token here" id="inputToken">
+          <button class="btn btn-primary" id="buttonIDTest">Shrink This!</button>
         </div>
       </div>
   </div>
@@ -19,18 +20,28 @@
       var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
       return (res !== null)
     };
-    function sendData() {
-      var url = document.getElementById("inputURL").value;
+
+    var el = document.getElementById("buttonIDTest");
+    el.addEventListener("click", avoidNSError, false); //Firefox
+
+function avoidNSError(){
+  ElementInterval = setInterval(function () {
+    var url = document.getElementById("inputURL").value;
+    var token = document.getElementById("inputToken").value;
       if (isValidURL(url)) {
         console.log("posting!")
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "https://cyci.rocks/api/v1/shorten", true);
+        xhr.open("POST", "http://localhost:8884/api/v1/shorten", true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify({
-          "url": url
+          "url": url,
+          "authorization": token
         }));
       }
-    }
+  clearInterval(ElementInterval);
+ },0);
+
+};
   </script>
 
   <%- include('../public/partials/footer') -%>

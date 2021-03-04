@@ -1,58 +1,31 @@
-const express = require('express');
 const db = require('../database/mysql');
 const logger = require('../utils/logger');
-router = express.Router();
+const resfile = require('../utils/renderFile');
+var dayjs = require('dayjs');
+const escape = require('../database/escaping');
+const createToken = require('../utils/createToken');
 async function get(req, res) {
-    console.log("works");
+    resfile(req, res, "shorten.ejs")
 }
 
 async function post(req, res) {
-    console.log(req.body)
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-    // const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,who = req.headers['user-agent'] || "Undefined (1.0.0)";
-    // console.log(ip);
-    // const fullUrl = req.body.fullUrl
-	// console.log('URL requested: ', fullUrl)
-
-    // if (!req.headers.authorization && !req.headers.userid) return logger.error(`Unauthorized request to /UPLOAD/ by ${ip} - ${who}`), res.json({error: `Unauthorized request`});
-    // db.query(`SELECT * FROM userData WHERE token = "${req.headers.authorization}"`, function(dberr, data) {
-    //     console.log("Hey it worked");
-    //     if (data == undefined) return res.status(401).json({error: 'unauthorized'}), logger.error(`Unauthorized request to /shorten/ by ${ip} - ${who}`)
-    //     if (data[0].id !== req.headers.userid) return res.status(401).json({error: 'unauthorized'}), logger.error(`Unauthorized request to /shorten/ by ${ip} - ${who}`)
-    //     if (dberr) return logger.error(`Internal DB error ${err}`)
-    //     const form = new formidable.IncomingForm();
-    //     form.parse(req, async (err, fields, files) => {
-    //         if (err) {
-    //             next(err);
-    //             return;
-    //         }
-    //         // line taken from old project called ShareS
-    //         if (files.cyciUploader && !fields.key) {
-    //             files.cyci = files.cyciUploader;
-    //         } else {
-    //             logger.error(`Non sharex upload requested by ${ip} - ${data[0].name}/${who}`)
-    //             return res.json({error: `Not using Sharex Uploader`})
-    //         }
-    //         const mimeFile = files.cyci.name.substring(files.cyci.name.lastIndexOf('.') + 1, files.cyci.name.length).toLowerCase();
-
-    //         if (!fileSettings.extensions.includes(mimeFile)) return logger.error(`Invalid mime-type to /UPLOAD/ by ${ip} - ${data[0].name}/${who}`), res.json({error: `Invalid mime-type`});
-    //         const file = await s3A.uploadImage(data[0].id, files.cyci.name, files.cyci.path);
-    //         let checkIfImg = JSON.parse(data[0].fileLink);
-           
-    //         if (checkIfImg !== null && checkIfImg.includes(file)) {
-    //             res.json({cyciUploader: `https://${file}`}).status(200)
-    //             logger.log(`${file} reupload by ${ip} - ${data[0].name}/${who}`);
-    //             return;
-    //         } else {
-    //             db.query(`UPDATE userData SET fileLink=COALESCE(JSON_ARRAY_APPEND(fileLink, '$', '${file}'), JSON_ARRAY('${file}')) WHERE id=${data[0].id}`);
-    //             res.json({cyciUploader: `https://${file}`}).status(200)
-    //             logger.log(`${file} uploaded by ${ip} - ${data[0].name}/${who}`);
-    //             return;
-    //         }
-
-    //     });
-    //});
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,who = req.headers['user-agent'] || "Undefined (1.0.0)";
+    var shortenInfo = req.body;
+    if (!req.body.authorization) return logger.error(`Unauthorized request to /shorten/ by ${ip} - ${who}`), res.json({error: `Unauthorized request`});
+    db.query(`SELECT * FROM userData WHERE token = "${req.body.authorization}"`, function(dberr, data) {
+        if (data == undefined) return res.status(401).json({error: 'unauthorized'}), logger.error(`Unauthorized request to /shorten/ by ${ip} - ${who}`)
+        if (dberr) return logger.error(`Internal DB error ${err}`)
+        const owner = data[0];
+        db.query(`SELECT * FROM userDataShorten WHERE shorten="${shortenInfo.url}"`, function(dberrShort, dataShort) {
+            if (dataShort == undefined || dataShort[0]) return res.status(401).json({error: 'Data Exists', url: `https://${process.env.SHORTEN_SERVER}/${dataShort[0].id}`}), logger.log(`request to /shorten/ by ${ip} - ${who}`);
+            if (dberrShort) return logger.error(`Internal DB error ${err}`)
+            const timestamp = dayjs(new Date()).format("YYYY,MM,DD");
+            var shortenURL = createToken(6);
+            db.query(`INSERT INTO userDataShorten (id, ownerID, shorten, created, visits) VALUES ("${shortenURL}", ${owner.id}, ${escape(shortenInfo.url)}, "${timestamp}", "{}")`).on('error', (err) => {return res.json({error: `Did not post to the DB contact staff@cyci.org`}), logger.error(`Bad upload to /shorten/ by ${ip} - ${owner.name}/${who} ${err}`)})
+            .on('result', (info) => {return logger.log(`Shortened URL! https://${process.env.SHORTEN_SERVER}/${shortenURL} - ${ip} - ${owner.name}/${who}`)})
+       })
+    });
     return;
 }
 
-module.exports = { post };
+module.exports = { get, post };
