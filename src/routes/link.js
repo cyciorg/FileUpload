@@ -21,9 +21,11 @@ async function get(req, res, next) {
         res.status(301).redirect(entireLink.shorten)
         const dayjs = require('dayjs')
         const timestamp = dayjs(new Date()).format("YYYY-MM-DD");
+
+        var fullIp = ip.length > 1 ? ip.join('-') : ip
         const entireL = `{
             '${timestamp}': {
-                '${ip}': {
+                '${fullIp}': {
                     who: {
                         '${createID(20)}': '${who}'
                     }
