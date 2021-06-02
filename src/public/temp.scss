@@ -24,9 +24,10 @@ $dark: hsl(0, 0%, 18%);
           position: absolute;
           left: 50%;
           display: block;
-          width: 160px;
+          width: 110px;
           text-align: center;
           background-color: #eee;
+          
       }
       .navbar>.container .navbar-brand-centered, 
       .navbar>.container-fluid .navbar-brand-centered {
@@ -34,10 +35,7 @@ $dark: hsl(0, 0%, 18%);
       }
   }
   
-  a.navbar-item {
-    color: #FAFAFF;
-    text-align: center;
-  }
+
   
   a.navbar-item:hover, a.navbar-item.is-active {
       background-color: hsl(0, 1%, 36%) !important;
@@ -52,20 +50,22 @@ $dark: hsl(0, 0%, 18%);
 }
 
 nav.navbar {
-    height: 5.2rem !important;
+    height: auto !important;
 }
-.container {
-    position: relative;
-}
+
 #tsparticles {
     position: absolute;
     height: 100%;
     width: 100%;
 }
 .container .main-content {
-    position: relative;
+    
     z-index: 1;
     background-color: transparent;
+}
+
+.fixFooter {
+    min-height: calc(100vh - 200px);
 }
 
 body {
@@ -77,13 +77,14 @@ body {
     
 .footer {
     position: absolute;
+    z-index: 1;
     bottom: 0;
     padding: 0.4rem;
     width: 100%;
   }
 
 #header-logo{
-    background: url('https://cdn.cyci.rocks/576688747481743/index.svg');
+    background: url('https://cdn.cyci.rocks/576688747481743/62276_user.svg');
     background-size: cover;
     width: 80px;
     height: 80px;

@@ -22,7 +22,7 @@ const logger = createLogger({
   ],
 });
 
-exports.log = async (content, type = 'log') => {
+exports.log = async (content, type = 'log', picture = "") => {
   switch(type) {
     case 'log':
       logger.log({level: "info", message: `${content}`})
@@ -30,7 +30,7 @@ exports.log = async (content, type = 'log') => {
       break;
     case 'error':
       logger.log({level: "error", message: `${content}`})
-      webhook(process.env.WEBHOOK_LINK, {title: "LOG - Error", color: process.env.LOGGING_COLOR_ERROR, info: content})
+      webhook(process.env.WEBHOOK_LINK, {title: "LOG - Error", color: process.env.LOGGING_COLOR_ERROR, info: content, picture})
       break;
   }
 };

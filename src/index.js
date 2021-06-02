@@ -19,12 +19,12 @@ function route() {
     app.set('view engine', 'ejs');
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.static(path.join(__dirname, 'views'), {extensions: ['css'],}));
-    app.use(bodyParser.text());
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.get(`/s/:urlShorten`, routes[2].get.bind(this))
+    // app.use(bodyParser.text());
+    // app.use(bodyParser.json());
+    // app.use(bodyParser.urlencoded({extended: true}));
+   // app.get(`/s/:urlShorten`, routes[2].get.bind(this))
     app.post(`${extras.apiText}/upload`, routes[0].post.bind(this));
-    app.post(`${extras.apiText}/shorten`, routes[1].post.bind(this));
+    //app.post(`${extras.apiText}/shorten`, routes[1].post.bind(this));
     app.get(`/shorten`, routes[1].get.bind(this))
     // temp just to shut bots up
     app.use(robots(__dirname + '/public/robots.txt'));

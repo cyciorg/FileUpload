@@ -5,6 +5,7 @@ const fs = require('fs');
 const promisify = require('util').promisify;
 const readFile = promisify(fs.readFile);
 var mime = require('mime-types')
+const createID = require('./createID');
 
 
 let params = {
@@ -29,9 +30,10 @@ class AmazonCDN {
         return dataS3.file;
       };
     uploadToS3(data, fileName, user) {
+        let newID = createID(5);
         const fileExt = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length).toLowerCase();
         let mimeType = mime.lookup(fileExt);
-        this._params.Key = `${user}/${fileName}`,this._params.Body = data,this._params.ContentType = mimeType;
+        this._params.Key = `${user}/${newID}_${fileName}`, this._params.Body = data,this._params.ContentType = mimeType;
         return {
         upload: this._s3.upload(this._params).promise(),
         file: process.env.SERVER + `/${this._params.Key}`
