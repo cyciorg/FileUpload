@@ -15,7 +15,8 @@ module.exports = {
                 }
             }
             if (conn) {
-                var q = conn.query.apply(conn, queryArgs);
+                
+                var q = conn.execute.apply(conn, queryArgs);
                 q.on('end', function () {
                     conn.release();
                 });
