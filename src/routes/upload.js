@@ -11,7 +11,7 @@ async function post(req, res) {
     res.setHeader('Content-Type', 'text/text');
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,who = req.headers['user-agent'] || "Undefined (1.0.0)";
     if (!req.headers.authorization && !req.headers.userid) return logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`), res.json({error: `Unauthorized request`});
-    db.query(`SELECT * FROM userData WHERE token = "${req.headers.authorization}"`, function(dberr, data) {
+    db.query(`SELECT * FROM userData WHERE token = ?`, [req.headers.authorization], function(dberr, data) {
         if (data == undefined) return res.status(401).json({error: 'unauthorized'}), logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`)
         if (data[0].id !== req.headers.userid) return res.status(401).json({error: 'unauthorized'}), logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`)
         if (dberr) return logger.error(`Internal DB error ${err}`)

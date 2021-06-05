@@ -1,5 +1,5 @@
 // MYSQL connection by AJ/TheOnlyKirb adds a promising feature for faster DB usage
-const mariadb = require('mysql');
+const mariadb = require('mysql2');
 mariadb.escape
 const pool = mariadb.createPool({host: process.env.MYSQL_ADDRESS, user: process.env.MYSQL_USER, password: process.env.MYSQL_PASS, database: process.env.MYSQL_DB, port: process.env.MYSQL_PORT, connectionLimit: 4000});
 module.exports = {

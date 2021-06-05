@@ -32,7 +32,7 @@
     "express-robots-txt": "^0.5.0",
     "formidable": "^1.2.2",
     "mime-types": "^2.1.29",
-    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
     "node-sass": "^5.0.0",
     "simple-encryptor": "^4.0.0",
     "winston": "^3.3.3",
