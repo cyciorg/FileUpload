@@ -10,7 +10,7 @@ const s3A = new AmazonCDN();
 async function post(req, res) {
     res.setHeader('Content-Type', 'text/text');
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,who = req.headers['user-agent'] || "Undefined (1.0.0)";
-    console.log(ip);
+    if (ip[0]) ip = ip[0]
     if (!req.headers.authorization && !req.headers.userid) return logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`), res.json({error: `Unauthorized request`});
     db.query(`SELECT * FROM userData WHERE token = ?`, [req.headers.authorization], function(dberr, data) {
         if (data == undefined) return res.status(401).json({error: 'unauthorized'}), logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`)
