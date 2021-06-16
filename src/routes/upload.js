@@ -36,11 +36,14 @@ async function post(req, res) {
             if (!fileSettings.extensions.includes(mimeFile)) return logger.error(`Invalid mime-type to /upload/ by ${ip} - ${data[0].name}/${who}`), res.json({error: `Invalid mime-type`});
             const file = await s3A.uploadImage(data[0].id, files.cyci.name, files.cyci.path);
            
-            db.query(`INSERT INTO userUpload(id, ownerID, name, siteLocation) VALUES (${createID(30)}, ${data[0].id}, "${file.substring(file.lastIndexOf('/') + 1, file.length)}", "https://${file}");`).on('error', err => {
-                console.log(err);
+            db.query(`INSERT INTO userUpload(id, ownerID, name, siteLocation) VALUES (${createID(30)}, ${data[0].id}, "${file.substring(file.lastIndexOf('/') + 1, file.length)}", "https://${file}");`)
+            .on('error', err => {
+                return logger.error(`Could not submit to database. please contact system administrators\n${ip} - ${who}\n${err}`), res.json({error: `DB could not post`});
             })
-            res.json({cyciUploader: `https://${file}`}).status(200)
-            logger.log(`${file} uploaded by ${ip} - ${data[0].name}/${who}`);
+            .on('result', resultUpload => {
+                res.json({cyciUploader: `https://${file}`}).status(200)
+                logger.log(`${file} uploaded by ${ip} - ${data[0].name}/${who}`, 'log', `https://${file}`);
+            });
             return;
             
 

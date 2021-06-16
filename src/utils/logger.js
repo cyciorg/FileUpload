@@ -26,11 +26,12 @@ exports.log = async (content, type = 'log', picture = "") => {
   switch(type) {
     case 'log':
       logger.log({level: "info", message: `${content}`})
-      webhook(process.env.WEBHOOK_LINK, {title: "LOG - Normal", color: process.env.LOGGING_COLOR_SUCCESS, info: content})
+     
+      webhook(process.env.WEBHOOK_LINK, {title: "LOG - Normal", color: process.env.LOGGING_COLOR_SUCCESS, info: content, picture: picture})
       break;
     case 'error':
       logger.log({level: "error", message: `${content}`})
-      webhook(process.env.WEBHOOK_LINK, {title: "LOG - Error", color: process.env.LOGGING_COLOR_ERROR, info: content, picture})
+      webhook(process.env.WEBHOOK_LINK, {title: "LOG - Error", color: process.env.LOGGING_COLOR_ERROR, info: content})
       break;
   }
 };
