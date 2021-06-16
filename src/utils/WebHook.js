@@ -30,7 +30,6 @@ async function sendWebhook(webhook, { title = "LOG - Default", color = "", info 
         "url": "https://cyci.org",
         "description": `\`\`\`${truncate(this.options.info)}\`\`\``,
         "color": this.options.color,
-        "thumbnail": (isPicture ? picture : null),
         "footer": {
           "text": `${new Date(Date.now())}`
         }
