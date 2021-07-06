@@ -25,7 +25,7 @@ function route() {
    // app.get(`/s/:urlShorten`, routes[2].get.bind(this))
     app.post(`${extras.apiText}/upload`, routes[0].post.bind(this));
     //app.post(`${extras.apiText}/shorten`, routes[1].post.bind(this));
-    app.post(`${extras.apiText}/gallery`, routes[3].post.bind(this));
+    app.post(`${extras.apiText}/gallery/:userID`, routes[3].post.bind(this));
     app.get(`/gallery`, routes[3].get.bind(this));
     app.get(`/shorten`, routes[1].get.bind(this))
     // temp just to shut bots up
