@@ -23,6 +23,7 @@
   "homepage": "https://github.com/cyciorg/FileUpload#readme",
   "dependencies": {
     "aws-sdk": "^2.843.0",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "bulma": "^0.9.2",
     "dayjs": "^1.10.4",
