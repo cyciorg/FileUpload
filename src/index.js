@@ -4,11 +4,10 @@ const session  = require('express-session');
 const app = express();
 const passport = require('passport');
 const path = require('path');
-
 const { connectDb, models } = require('./db/connector.js');
 var compression = require('compression');
 const checkAuth = require('./utils/checkAuth.js');
-var routesArray = [require('./routes/index.js')];
+var routesArray = [require('./routes/index.js'), require('./routes/appendUserRole.js')];
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -16,7 +15,6 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-
 
 var DiscordStrategy = require('passport-discord').Strategy
   , refresh = require('passport-oauth2-refresh')
@@ -54,7 +52,9 @@ function middleWaresOrSets() {
   app.set('trust proxy', 1);
   app.set('view engine', 'ejs');
   app.use(express.static(path.join(__dirname, 'public')));
-  app.use(express.static(path.join(__dirname, 'views'), {extensions: ['css'],}));
+  app.use(express.static(path.join(__dirname, 'views'), {extensions: ['css']}));
+  app.locals.models = models;
+  app.locals.roles = require('./utils/roles');
 }
 
 function routes() {
@@ -76,10 +76,7 @@ function routes() {
       req.logout();
       res.redirect('/');
   });
-  app.get('/info', checkAuth, function(req, res) {
-      //console.log(req.user)
-      res.json(req.user);
-  });
+  app.get('/api/v1/append-role/:userId', routesArray[1].post.bind(this));
 
   connectDb().then(async () => {
       app.listen(process.env.PORT, function(err) {
@@ -88,7 +85,5 @@ function routes() {
       })
   });
 }
-
-
 
 routes();

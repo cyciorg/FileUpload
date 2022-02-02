@@ -29,9 +29,9 @@
       </ul>
       <% if (req.isAuthenticated()) { %>
         <% if (user.premium_type == 2) { %>
-          <button class="flex items-center border-[#f3e3df] inline-block px-6 py-2 bg-gray-200 rounded text-sm px-4 py-2.5" data-dropdown-toggle="dropdown" style="background-repeat: no-repeat;background-size: 100% auto; background-image: url('https://cdn.discordapp.com/banners/<%- user.id %>/<%- user.banner %>.gif');">
+          <button class="flex items-center border-[#f3e3df] inline-block px-6 py-2 bg-gray-200 rounded text-sm px-4 py-2.5" data-dropdown-toggle="dropdown" style="background-repeat: no-repeat;background-size: 100% auto; background-image: url('https://cdn.discordapp.com/banners/<%- user.id %>/<%- user.banner %>.gif'); box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);">
         <% } else { %>
-          <button class="flex items-center border-[#f3e3df] inline-block px-6 py-2 bg-gray-200 rounded text-sm px-4 py-2.5" data-dropdown-toggle="dropdown" style="background-repeat: no-repeat;background-size: 100% auto; background-image: url('https://cdn.discordapp.com/banners/<%- user.id %>/<%- user.banner %>.jpeg');">
+          <button class="flex items-center border-[#f3e3df] inline-block px-6 py-2 bg-gray-200 rounded text-sm px-4 py-2.5" data-dropdown-toggle="dropdown" style="background-repeat: no-repeat;background-size: 100% auto; background-image: url('https://cdn.discordapp.com/banners/<%- user.id %>/<%- user.banner %>.jpeg'); box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);">
         <% } %>
           <div class="mr-3">
              <p class="text-sm text-white"><%- user.username %>#<%- user.discriminator %></p>
@@ -68,7 +68,7 @@
                 <a href="#" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Temp</a>
              </li>
              <li>
-                <a href="/api/v1/logout" class="text-sm hover:bg-red-100 text-white block px-4 py-2">Sign out</a>
+                <a href="/api/v1/logout" class="text-sm hover:bg-red-400 text-white block px-4 py-2">Sign out</a>
              </li>
           </ul>
        </div>
@@ -95,7 +95,7 @@
         <div class="mt-auto">
           <p class="my-4 text-xs text-blueGray-400">
             <span>Get in Touch</span>
-            <a class="text-blue-600 hover:text-blue-600 underline" href="#">info@example.com</a>
+            <a class="text-blue-600 hover:text-blue-600 underline" href="#">contact@cyci.org</a>
           </p>
           <a class="inline-block px-1" href="#">
             <img src="metis-assets/icons/facebook-blue.svg" alt=""></a>
