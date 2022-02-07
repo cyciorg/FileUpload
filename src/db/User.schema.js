@@ -74,8 +74,8 @@ UserAccount.statics.findOrCreate = function findOrCreate(profile, cb){
         var userObj = new UserAccount({
           userid: profile.id,
           email: profile.email,
-          api_token: profile.refreshToken,
-          roles: [],
+          api_token: '',
+          roles: [0],
           data: [],
           account_type: '',
           date: now

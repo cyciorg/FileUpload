@@ -7,7 +7,7 @@ const path = require('path');
 const { connectDb, models } = require('./db/connector.js');
 var compression = require('compression');
 const checkAuth = require('./utils/checkAuth.js');
-var routesArray = [require('./routes/index.js'), require('./routes/appendUserRole.js')];
+var routesArray = [require('./routes/index.js'), require('./routes/appendUserRole.js'), require('./routes/upload.js')];
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -76,6 +76,7 @@ function routes() {
       req.logout();
       res.redirect('/');
   });
+  app.post('/api/v1/upload', routesArray[2].post.bind(this));
   app.get('/api/v1/append-role/:userId', routesArray[1].post.bind(this));
 
   connectDb().then(async () => {
