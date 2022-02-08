@@ -29,7 +29,7 @@ async function post(req, res) {
     
     
     //
-     models.User.addImageOrFile(account, {name: "fileName", value: "fileName", size: "fileSize", type: "fileType", created_at: "now"});
+    //// models.User.addImageOrFile(account, {name: "fileName", value: "fileName", size: "fileSize", type: "fileType", created_at: "now"});
     //
 
 
