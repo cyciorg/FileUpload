@@ -18,7 +18,8 @@ async function post(req, res) {
     if (!userHeaderInformation['xuser-email'] || !userHeaderInformation['xuser-id'] && !userHeaderInformation['xuser-api_token']) return res.json({error: `Unauthorized request`}); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`), 
     console.log(userHeaderInformation['xuser-id'] + " " + userHeaderInformation['xuser-email']);;
     let account = await models.User.findByEmailOrId({email: userHeaderInformation['xuser-email'], userid: userHeaderInformation['xuser-id']}).then();
-    if (!account) return res.json({error: `Unauthorized request. user does not exist.`}); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`),
+    console.log(account);
+    if ((account instanceof Error)) return res.json({error: `Unauthorized request. user does not exist.`}); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`),
     if (!account.api_token) return res.json({error: `Unauthorized request. user does not have an api token.`}); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`),
     if (account.api_token !== userHeaderInformation['xuser-api_token']) return res.json({error: `Unauthorized request. user api token does not match.`}); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`),
     form.parse(req, async (err, fields, files) => {
@@ -50,18 +51,18 @@ async function post(req, res) {
         // TODO: add file-type-specific validation
         // TODO: check if user has exceeded their quota
 
-        let fileUpload = await s3A.uploadImage(account, fileData, fileData.filePath);
-        fileData.id = fileUpload.id;
-        fileData.url = fileUpload.url;
-        fileData.fileDateUpload = fileUpload.fileDateUpload;
-        console.log(fileData);
-        models.User.addImageOrFile(account, 
-            {name: fileData.fileName, id: fileData.id, value: fileData.url, size: fileData.fileSize, type: fileData.fileExtension, created_at: fileData.fileDateUpload}, function(err, result) {
-                if (err) return res.json({error: `Error adding file to database.`}) + console.log(err);
+        // let fileUpload = await s3A.uploadImage(account, fileData, fileData.filePath);
+        // fileData.id = fileUpload.id;
+        // fileData.url = fileUpload.url;
+        // fileData.fileDateUpload = fileUpload.fileDateUpload;
+        // console.log(fileData);
+        // models.User.addImageOrFile(account, 
+        //     {name: fileData.fileName, id: fileData.id, value: fileData.url, size: fileData.fileSize, type: fileData.fileExtension, created_at: fileData.fileDateUpload}, function(err, result) {
+        //         if (err) return res.json({error: `Error adding file to database.`}) + console.log(err);
             
-                res.json({cyciUploader: `https://${fileData.url}`}).status(200)
-                console.log(account);
-            });
+        //         res.json({cyciUploader: `https://${fileData.url}`}).status(200)
+        //         console.log(account);
+        //     });
     });
 }
 

@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const session  = require('express-session');
 const app = express();
+var client = require('redis').createClient();
+var limiter = require('express-limiter')(app, client)
 const passport = require('passport');
 const path = require('path');
 const { connectDb, models } = require('./db/connector.js');
@@ -55,6 +57,21 @@ function middleWaresOrSets() {
   app.use(express.static(path.join(__dirname, 'views'), {extensions: ['css']}));
   app.locals.models = models;
   app.locals.roles = require('./utils/roles');
+
+//   limiter({
+//     lookup: function(req, res, opts, next) {
+//       // if (validApiKey(req.query.api_key)) {
+//       //   opts.lookup = 'query.api_key'
+//       //   opts.total = 100
+//       // } else {
+//       //   opts.lookup = 'connection.remoteAddress'
+//       //   opts.total = 10
+//       // }
+//       if ()
+//       return next()
+//     }
+//   })
+// }
 }
 
 function routes() {

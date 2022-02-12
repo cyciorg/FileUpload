@@ -18,18 +18,25 @@ const UserAccount = new Schema({
 });
 
 UserAccount.statics.findByEmailOrId = async function findByEmailOrId(data, cb){
-  if (!data) return new Promise((_resolve, reject) => {reject(new Error('No data provided'))});
+  if (!data) return Promise.reject('No data provided');
   if (data.email) {
-    let account = await this.findOne({email: data.email}).then();
-    if (account.err) 
-    if (!account) return new Promise((_resolve, reject) => {reject(new Error('No account found'));});
-    return new Promise((resolve, _reject) => {resolve(account)});
+    let account = await this.findOne({email: data.email}).then().catch(err => {return new Error(err)});
+    if ((account instanceof Error)) Promise.reject(new Error('No account found')).catch(err => {return err});
+    if (!account) Promise.reject(new Error('No account found')).catch(err => {return err});
+    return Promise.resolve(account);
   } else if (data.userid) {
     let account = await this.findOne({email: data.email}).then();
-    if (account.err) return new Promise((_resolve, reject) => {reject(account.err)}); 
-    if (!account) return new Promise.reject(new Error('No account found'));
-    return new Promise((resolve, _reject) => {resolve(account)});
+    if ((account instanceof Error)) Promise.reject(new Error('No account found')).catch(err => {return err});
+    if (!account) Promise.reject(new Error('No account found')).catch(err => {return err});
+    return Promise.resolve(account);
   }
+};
+
+UserAccount.statics.checkApiToken = function checkApiToken(user, token, cb){
+  if (!user) Promise.reject(new Error('No user provided')).catch(err => {return err});
+  if (!token) Promise.reject(new Error('No token provided')).catch(err => {return err});
+  if (user.api_token !== token) Promise.reject(new Error('Invalid token')).catch(err => {return err});
+  return Promise.resolve(true);
 };
 
 UserAccount.statics.removeImageOrFile = function removeImageOrFile(user, data, cb){
