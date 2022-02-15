@@ -14,7 +14,10 @@ const UserAccount = new Schema({
   storage_used: Number,
   data: [{name: { type: String }, id: { type: String }, value: { type: String }, size: { type: String }, type: { type: String }, created_at: { type: Date }}],
   account_type: String,
-  date: Date
+  is_banned: Boolean,
+  ban_reason: String,
+  ban_expiry: Date,
+  date: { type: Date, default: now },
 });
 
 UserAccount.statics.findByEmailOrId = async function findByEmailOrId(data, cb){

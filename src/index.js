@@ -2,13 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const session  = require('express-session');
 const app = express();
-var client = require('redis').createClient();
-var limiter = require('express-limiter')(app, client)
+var helmet = require('helmet')
 const passport = require('passport');
 const path = require('path');
+const Mongoose = require('mongoose');
 const { connectDb, models } = require('./db/connector.js');
 var compression = require('compression');
 const checkAuth = require('./utils/checkAuth.js');
+const { Mongoose } = require('mongoose');
 var routesArray = [require('./routes/index.js'), require('./routes/appendUserRole.js'), require('./routes/upload.js')];
 
 passport.serializeUser(function(user, done) {
@@ -51,27 +52,13 @@ function middleWaresOrSets() {
   }));
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(helmet())
   app.set('trust proxy', 1);
   app.set('view engine', 'ejs');
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(express.static(path.join(__dirname, 'views'), {extensions: ['css']}));
   app.locals.models = models;
   app.locals.roles = require('./utils/roles');
-
-//   limiter({
-//     lookup: function(req, res, opts, next) {
-//       // if (validApiKey(req.query.api_key)) {
-//       //   opts.lookup = 'query.api_key'
-//       //   opts.total = 100
-//       // } else {
-//       //   opts.lookup = 'connection.remoteAddress'
-//       //   opts.total = 10
-//       // }
-//       if ()
-//       return next()
-//     }
-//   })
-// }
 }
 
 function routes() {
@@ -96,11 +83,19 @@ function routes() {
   app.post('/api/v1/upload', routesArray[2].post.bind(this));
   app.get('/api/v1/append-role/:userId', routesArray[1].post.bind(this));
 
-  connectDb().then(async () => {
+  connectDb().then(async (errMongo) => {
+    if (errMongo) {
+      // TODO: implement error handling
+      console.log(errMongo);
+    } else {
       app.listen(process.env.PORT, function(err) {
+          let {BruteForce} = require('./middleware/bruteForce.js');
+          let bruteforce = new BruteForce(Mongoose.connection);
+          app.use('/api/v1', bruteforce.rateLimiterMiddleware);
           if (err) return console.log(err)
           console.log(`Listening on port ${process.env.PORT}`)
       })
+    }
   });
 }
 
