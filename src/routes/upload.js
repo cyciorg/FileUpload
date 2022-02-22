@@ -51,6 +51,8 @@ async function post(req, res) {
         // TODO: add rate-limiting and other security measures
         // TODO: add file-type-specific validation
         // TODO: check if user has exceeded their quota
+        // TODO: Anti-DDoS measures
+        // TODO: Anti-Viral measures
 
         let fileUpload = await s3A.uploadImage(account, fileData, fileData.filePath);
         fileData.id = fileUpload.id;
