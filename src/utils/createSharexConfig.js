@@ -8,7 +8,7 @@ class ShareXConfig {
             "Name": "ShareXConfig-Cyci",
             "DestinationType": "ImageUploader, FileUploader",
             "RequestMethod": "POST",
-            "RequestURL": `http://${process.env['SERVER']}/api/v1/upload`,
+            "RequestURL": `http://${process.env['API']}/api/v1/upload`,
             "Parameters": {
               "alpha": Date.now(),
               "version": require('../../package.json').version,
