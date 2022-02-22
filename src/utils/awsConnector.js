@@ -1,10 +1,12 @@
 var AWS = require('aws-sdk'); 
+var dayjs = require('dayjs');
 AWS.config.update({accessKeyId: process.env.AWSS3_ID,secretAccessKey: process.env.AWSS3_KEY});
-s3 = new AWS.S3({apiVersion: new Date(Date.now())});
+s3 = new AWS.S3({apiVersion: dayjs().format('YYYYMMDD')});
 const { readFile } = require("fs/promises");
 var mime = require('mime-types')
 const createID = require('./createID');
-var dayjs = require('dayjs');
+
+const { log } = require('console');
 var now = dayjs()
 let params = {
     Bucket: process.env.AWSS3_BUCKET,
@@ -62,15 +64,14 @@ class AmazonCDN {
     
     /**
      * @param {Int} userId
+     * @returns {Boolean}
      */
-    async checkIfUserExists(userId) {
-      const paramFolder = {Bucket: process.env.AWSS3_BUCKET,Prefix: `${userId}/`}
-      s3.listObjectsV2(paramFolder, function(err, data) {
-        const folderExists = data.Contents.length > 0;
-          if (folderExists == true) {
-            return true;
-          } else return false;
-      })
+   async checkIfUserExists(userId) {
+      const paramFolder = {Bucket: process.env.AWSS3_BUCKET, Prefix: `${userId}/`}
+      let data = await this._s3.listObjectsV2(paramFolder).promise()
+      if(data.Contents.length > 0) return true;
+      else return false;
     }
-}
+  };
+
 module.exports = AmazonCDN;

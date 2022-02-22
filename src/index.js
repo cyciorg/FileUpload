@@ -9,7 +9,6 @@ const Mongoose = require('mongoose');
 const { connectDb, models } = require('./db/connector.js');
 var compression = require('compression');
 const checkAuth = require('./utils/checkAuth.js');
-const { Mongoose } = require('mongoose');
 var routesArray = [require('./routes/index.js'), require('./routes/appendUserRole.js'), require('./routes/upload.js')];
 
 passport.serializeUser(function(user, done) {
@@ -84,18 +83,20 @@ function routes() {
   app.get('/api/v1/append-role/:userId', routesArray[1].post.bind(this));
 
   connectDb().then(async (errMongo) => {
-    if (errMongo) {
-      // TODO: implement error handling
-      console.log(errMongo);
-    } else {
+    //if (errMongo) return console.log(errMongo);
+    // if (errMongo) {
+    //   // TODO: implement error handling
+    //   console.log(errMongo);
+    // } else {
       app.listen(process.env.PORT, function(err) {
           let {BruteForce} = require('./middleware/bruteForce.js');
-          let bruteforce = new BruteForce(Mongoose.connection);
-          app.use('/api/v1', bruteforce.rateLimiterMiddleware);
+          
           if (err) return console.log(err)
+          // let bruteforce = new BruteForce(Mongoose.connection);
+          // app.use(bruteforce.rateLimiterMiddleware2);
           console.log(`Listening on port ${process.env.PORT}`)
       })
-    }
+    //}
   });
 }
 
