@@ -2,14 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const session  = require('express-session');
 const app = express();
-var helmet = require('helmet')
+//var helmet = require('helmet')
 const passport = require('passport');
 const path = require('path');
 const Mongoose = require('mongoose');
 const { connectDb, models } = require('./db/connector.js');
 var compression = require('compression');
 const checkAuth = require('./utils/checkAuth.js');
-var routesArray = [require('./routes/index.js'), require('./routes/appendUserRole.js'), require('./routes/upload.js')];
+var routesArray = [require('./routes/index.js'), require('./routes/appendUserRole.js'), require('./routes/upload.js'), require('./routes/getConfig.js')];
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -51,13 +51,13 @@ function middleWaresOrSets() {
   }));
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(helmet())
+  
   app.set('trust proxy', 1);
   app.set('view engine', 'ejs');
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(express.static(path.join(__dirname, 'views'), {extensions: ['css']}));
-  app.locals.models = models;
-  app.locals.roles = require('./utils/roles');
+  // app.locals.models = models;
+  // app.locals.roles = require('./utils/roles');
 }
 
 function routes() {
@@ -79,6 +79,8 @@ function routes() {
       req.logout();
       res.redirect('/');
   });
+  let middlewareArray = [checkAuth]
+  app.get('/api/v1/config', middlewareArray, routesArray[3].get.bind(this));
   app.post('/api/v1/upload', routesArray[2].post.bind(this));
   app.get('/api/v1/append-role/:userId', routesArray[1].post.bind(this));
 

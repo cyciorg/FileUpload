@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <link rel="stylesheet" href="css/tailwind/tailwind.min.css">
+    <link rel="stylesheet" href="http://localhost:5000/css/tailwind/tailwind.min.css">
     
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-tailwind.png">
     <script src="js/main.js"></script>
@@ -27,7 +27,7 @@
         <li><a class="text-sm text-blueGray-400 hover:text-blueGray-500" href="#">About Us</a></li>
         <li><a class="text-sm text-blueGray-400 hover:text-blueGray-500" href="#">Gallery</a></li>
       </ul>
-      <% if (req.isAuthenticated()) { %>
+      <% if (isAuthenticated) { %>
         <% if (user.premium_type == 2) { %>
           <button class="flex items-center border-[#f3e3df] inline-block px-6 py-2 bg-gray-200 rounded text-sm px-4 py-2.5" data-dropdown-toggle="dropdown" style="background-repeat: no-repeat;background-size: 100% auto; background-image: url('https://cdn.discordapp.com/banners/<%- user.id %>/<%- user.banner %>.gif'); box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);">
         <% } else { %>
@@ -35,12 +35,15 @@
         <% } %>
           <div class="mr-3">
              <p class="text-sm text-white"><%- user.username %>#<%- user.discriminator %></p>
-             <p class="text-sm text-gray-400"><%- user.locale %></p>
+            
+             <p class="text-sm text-['#991a1a']"><%- role.name %></p>
           </div>
           <div class="mr-2">
             <!-- simple work around will fix later -->
             <% if (user.premium_type == 2) { %>
-              <img class="w-10 h-10 rounded-full border border-[] object-cover object-right" src="https://cdn.discordapp.com/avatars/<%- user.id %>/<%- user.avatar %>.gif" alt="">
+            
+              
+              <img class="w-10 h-10 rounded-full border border-green-200 object-cover object-right" src="https://cdn.discordapp.com/avatars/<%- user.id %>/<%- user.avatar %>.gif" alt="">
             <% } else { %>
              <img class="w-10 h-10 rounded-full border border-green-200 object-cover object-right" src="https://cdn.discordapp.com/avatars/<%- user.id %>/<%- user.avatar %>.jpeg" alt="">
             <% } %>

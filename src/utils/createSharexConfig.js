@@ -1,4 +1,4 @@
-const { writeFile } = require("fs/promises");
+const {  File } = require("fs/promises");
 const globalConfig = {"format": "sxcu"}
 class ShareXConfig {
     constructor(user) {
@@ -14,9 +14,9 @@ class ShareXConfig {
               "version": require('../../package.json').version,
             },
             "Headers": {
-              "xuser-email": this._user.email,
-              "xuser-id": this._user.userid,
-              "xuser-api_token": this._user.api_token
+              "x-user-email": this._user.email,
+              "x-user-id": this._user.userid,
+              "x-user-api_token": this._user.api_token
             },
             "Body": "MultipartFormData",
             "FileFormName": "cyciUploader",
@@ -25,13 +25,7 @@ class ShareXConfig {
           }
     }
     generateConfig = () => new Promise((resolve, reject) => {
-        writeFile(`ShareXConfig-Cyci-${this._user.userid}.${globalConfig.format}`, JSON.stringify(this._config, null, 2), 'utf8')
-        .then(() => {
-           resolve("Successfully created ShareXConfig-Cyci");
-        })
-        .catch(err => {
-            reject(err);
-        })
+       resolve({name: `ShareXConfig-Cyci-${this._user.userid}.${globalConfig.format}`, json: this._config});
     });
 }
 
