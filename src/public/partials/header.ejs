@@ -36,13 +36,11 @@
           <div class="mr-3">
              <p class="text-sm text-white"><%- user.username %>#<%- user.discriminator %></p>
             
-             <p class="text-sm text-['#991a1a']"><%- role.name %></p>
+             <p class="text-sm <%- role.color %>"><%- role.name %></p>
           </div>
           <div class="mr-2">
             <!-- simple work around will fix later -->
             <% if (user.premium_type == 2) { %>
-            
-              
               <img class="w-10 h-10 rounded-full border border-green-200 object-cover object-right" src="https://cdn.discordapp.com/avatars/<%- user.id %>/<%- user.avatar %>.gif" alt="">
             <% } else { %>
              <img class="w-10 h-10 rounded-full border border-green-200 object-cover object-right" src="https://cdn.discordapp.com/avatars/<%- user.id %>/<%- user.avatar %>.jpeg" alt="">

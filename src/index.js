@@ -29,8 +29,7 @@ var discordStrat = new DiscordStrategy({
     callbackURL: process.env.DISCORD_CALLBACK_URL,
     scope: scopes,
     prompt: prompt
-},
-function(accessToken, refreshToken, profile, cb) {
+},function(accessToken, refreshToken, profile, cb) {
     profile.refreshToken = refreshToken; // store this for later refreshes
     models.User.findOrCreate(profile, (err, profile) => {
       if (err) return cb(err);
@@ -42,8 +41,7 @@ function(accessToken, refreshToken, profile, cb) {
 function middleWaresOrSets() {
   passport.use(discordStrat);
   refresh.use(discordStrat);
-  app.use(compression())
-  // req.isAuthenticated is provided from the auth router
+  app.use(compression());
   app.use(session({
       secret: process.env.SESSION_SECRET,
       resave: false,
@@ -51,36 +49,29 @@ function middleWaresOrSets() {
   }));
   app.use(passport.initialize());
   app.use(passport.session());
-  
   app.set('trust proxy', 1);
   app.set('view engine', 'ejs');
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(express.static(path.join(__dirname, 'views'), {extensions: ['css']}));
-  // app.locals.models = models;
-  // app.locals.roles = require('./utils/roles');
 }
 
 function routes() {
   middleWaresOrSets();
-  app.get('/', routesArray[0].get.bind(this))
+  app.get('/', routesArray[0].get.bind(this));
   app.get('/api/v1/login', passport.authenticate('discord', {
       scope: scopes,
       prompt: prompt
-  }), function(req, res) {});
+  }));
   app.get('/api/v1/callback',
       passport.authenticate('discord', {
           failureRedirect: '/'
       }),
-      function(req, res) {
-          res.redirect('/')
-      } // auth success
-  );
+      function(req, res) {res.redirect('/')});
   app.get('/api/v1/logout', function(req, res) {
       req.logout();
       res.redirect('/');
   });
-  let middlewareArray = [checkAuth]
-  app.get('/api/v1/config', middlewareArray, routesArray[3].get.bind(this));
+  app.get('/api/v1/config', checkAuth, routesArray[3].get.bind(this));
   app.post('/api/v1/upload', routesArray[2].post.bind(this));
   app.get('/api/v1/append-role/:userId', routesArray[1].post.bind(this));
 
