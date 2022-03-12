@@ -1,42 +1,41 @@
 require('dotenv').config()
-const express = require('express');
-const logger = require('./utils/logger');
-const bodyParser = require("body-parser");
-const path = require('path')
-const resfile = require('./utils/renderFile');
-const robots = require('express-robots-txt')
-const routes = [require('./routes/upload'), require('./routes/shorten'), require('./routes/link'), require('./routes/gallery')]
-let extras = {
-    webHookDate: null,
-    webHookCoolDown: 1500,
-    apiText: '/api/v1'
-}
-const app = express();
+const { log } = require('console');
+const Discord = require("discord.js");
+const client = new Discord.Client({ fetchAllMembers: false, disabledEvents: ['TYPING_START', 'TYPING_STOP', 'RELATIONSHIP_ADD', 'RELATIONSHIP_REMOVE', 'USER_NOTE_UPDATE', 'USER_NOTE_UPDATE', 'GUILD_BAN_ADD', 'GUILD_BAN_REMOVE'], http: { api: 'https://discordapp.com/api', version: 7 }, disableEveryone: true, messageCacheMaxSize: 1, messageCacheLifetime: 1, messageSweepInterval: 1 });
+const { readdir } = require("fs/promises");
+client.config = require("./config.js");
 
-function route() {
-    logger.log("Adding routes")
-    app.set('trust proxy', 1);
-    app.set('view engine', 'ejs');
-    app.use(express.static(path.join(__dirname, 'public')));
-    app.use(express.static(path.join(__dirname, 'views'), {extensions: ['css'],}));
-    // app.use(bodyParser.text());
-    // app.use(bodyParser.json());
-    // app.use(bodyParser.urlencoded({extended: true}));
-   // app.get(`/s/:urlShorten`, routes[2].get.bind(this))
-    app.post(`${extras.apiText}/upload`, routes[0].post.bind(this));
-    //app.post(`${extras.apiText}/shorten`, routes[1].post.bind(this));
-    app.post(`${extras.apiText}/gallery/:userID`, routes[3].post.bind(this));
-    app.get(`/gallery`, routes[3].get.bind(this));
-    app.get(`/shorten`, routes[1].get.bind(this))
-    // temp just to shut bots up
-    app.use(robots(__dirname + '/public/robots.txt'));
-    app.get('/', function(req, res) { 
-        const ip =  req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress, who = req.headers['user-agent'] || "Undefined (1.0.0)";
-        logger.log(`index requested by ${ip} - ${who}`)
-        resfile(req, res, "index.ejs") 
+async function init() {
+    const cmds = await readdir("./src/commands/run/");
+    //client.logger.log(`Loading a total of ${cmds.length} commands.`);
+    cmds.forEach(f => {
+        if (!f.endsWith(".js")) return;
+        const response = client.loadCommand(f);
+        if (response) console.log(response);
     });
+    const event = await readdir("./src/events/");
+    //client.logger.log(`Loading a total of ${event.length} events.`);
+    event.forEach(file => {
+        const eventName = file.split(".")[0];
+        const event = require(`./events/${file}`);
+        client.on(eventName, event.bind(null, client));
+    });
+    
+    client.levelCache = {};
+    for (let i = 0; i < client.config.permLevels.length; i++) {
+        const thisLevel = client.config.permLevels[i];
+        client.levelCache[thisLevel.name] = thisLevel.level;
+    }
+    try {
+        client.login(client.config.token);
+    } catch (err) {
+        client.logger.error(err);
+        procces.exit(1);
+    }
 }
-
-route();
-logger.log("Server started on " + process.env.SERVER_PORT);
-app.listen(process.env.SERVER_PORT, function(err) {if (err) return })
+connectDb().then(async (info) => {
+    log(`Connected to MongoDB at ${info}`);
+    init();
+}).catch(errMongo => {
+    console.log(errMongo);
+});
