@@ -23,7 +23,7 @@ const config = {
         { level: 1,
           name: "Premium",
             check: async (message) => {
-                let premium = await User.findByEmailOrId2(message.author).then();
+                let premium = await User.findByEmailOrId2({userid: message.author.id}).then();
                 if (premium.roles.includes(1)) {
                     return true;
                 }
@@ -34,7 +34,7 @@ const config = {
             level: 2,
             name: "Mods",
             check: async (message) => {
-                let premium = await User.findByEmailOrId2(message.author).then();
+                let premium = await User.findByEmailOrId2({userid: message.author.id}).then();
                 if (premium.roles.includes(2)) {
                     return true;
                 }
@@ -44,17 +44,17 @@ const config = {
         { level: 3,
           name: "Admin",
           check: async (message) => {
-            let premium = await User.findByEmailOrId2(message.author).then();
+            let premium = await User.findByEmailOrId2({userid: message.author.id}).then();
                 if (premium.roles.includes(3)) {
                     return true;
                 }
                     else return false;
                 }
         },
-        { level: 10,
+        { level: 4,
           name: "Owner", 
             check: async (message) => {
-              let premium = await User.findByEmailOrId2(message.author).then();
+              let premium = await User.findByEmailOrId2({userid: message.author.id}).then();
                 if (premium.roles.includes(4)) {
                     return true;
                 }

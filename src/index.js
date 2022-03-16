@@ -1,16 +1,24 @@
 require('dotenv').config()
 const { log } = require('console');
 const Discord = require("discord.js");
-const client = new Discord.Client({ fetchAllMembers: false, disabledEvents: ['TYPING_START', 'TYPING_STOP', 'RELATIONSHIP_ADD', 'RELATIONSHIP_REMOVE', 'USER_NOTE_UPDATE', 'USER_NOTE_UPDATE', 'GUILD_BAN_ADD', 'GUILD_BAN_REMOVE'], http: { api: 'https://discordapp.com/api', version: 7 }, disableEveryone: true, messageCacheMaxSize: 1, messageCacheLifetime: 1, messageSweepInterval: 1 });
+const {Intents} = require('discord.js');
+const client = new Discord.Client({ intents: [Intents.FLAGS.GUILDS] });
 const { readdir } = require("fs/promises");
 client.config = require("./config.js");
+client.commands = new Discord.Collection();
+client.aliases = new Discord.Collection();
+const {connectDb} = require("./db/connector.js");
+client.cooldown = new Discord.Collection();
+client.temporaryCommands = []
+require('./commands/commandHandler')(client);
+client.global = {};
 
 async function init() {
     const cmds = await readdir("./src/commands/run/");
     //client.logger.log(`Loading a total of ${cmds.length} commands.`);
     cmds.forEach(f => {
         if (!f.endsWith(".js")) return;
-        const response = client.loadCommand(f);
+        const response = client.loadSlashCommand(f);
         if (response) console.log(response);
     });
     const event = await readdir("./src/events/");
@@ -33,6 +41,7 @@ async function init() {
         procces.exit(1);
     }
 }
+log(`Starting client...`);
 connectDb().then(async (info) => {
     log(`Connected to MongoDB at ${info}`);
     init();

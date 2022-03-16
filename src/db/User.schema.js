@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 var dayjs = require('dayjs');
-const roles = require('../utils/roles');
+//const roles = require('../utils/roles');
 const crypto = require('crypto');
 var now = dayjs()
 
@@ -19,21 +19,6 @@ const UserAccount = new Schema({
   ban_expiry: Date,
   date: { type: Date, default: now },
 });
-
-UserAccount.statics.findByEmailOrId2 = (data) => new Promise((resolve, reject) => {
-    if (!data) reject('No data provided');
-    if (data.email) {
-        this.findOne({email: data.email}).then(result => {
-            if (!result) reject('No account found');
-            resolve(result);
-        }).catch(err => reject(err));
-    } else if (data.userid) {
-        this.findOne({email: data.email}).then(result => {
-            if (!result) reject('No account found');
-            resolve(result);
-        }).catch(err => reject(err));
-    }
-});
 UserAccount.statics.findByEmailOrId = async function findByEmailOrId(data, cb){
   if (!data) return Promise.reject('No data provided');
   if (data.email) {
@@ -42,7 +27,7 @@ UserAccount.statics.findByEmailOrId = async function findByEmailOrId(data, cb){
     if (!account) Promise.reject(new Error('No account found')).catch(err => {return err});
     return Promise.resolve(account);
   } else if (data.userid) {
-    let account = await this.findOne({email: data.email}).then();
+    let account = await this.findOne({userid: data.userid}).then();
     if ((account instanceof Error)) Promise.reject(new Error('No account found')).catch(err => {return err});
     if (!account) Promise.reject(new Error('No account found')).catch(err => {return err});
     return Promise.resolve(account);
