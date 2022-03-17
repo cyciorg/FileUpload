@@ -28,7 +28,7 @@ UserAccount.statics.findByEmailOrId = async function findByEmailOrId(data, cb){
     if (!account) Promise.reject(new Error('No account found')).catch(err => {return err});
     return Promise.resolve(account);
   } else if (data.userid) {
-    let account = await this.findOne({email: data.email}).then();
+    let account = await this.findOne({userid: data.userid}).then();
     if ((account instanceof Error)) Promise.reject(new Error('No account found')).catch(err => {return err});
     if (!account) Promise.reject(new Error('No account found')).catch(err => {return err});
     return Promise.resolve(account);
