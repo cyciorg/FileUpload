@@ -22,12 +22,12 @@ const UserAccount = new Schema({
 UserAccount.statics.findByEmailOrId = async function findByEmailOrId(data, cb){
   if (!data) return Promise.reject('No data provided');
   if (data.email) {
-    let account = await this.findOne({email: data.email}).then().catch(err => {return new Error(err)});
+    let account = await this.findOne({email: data.email}).then().catch(err => {Promise.reject(new Error(err))});
     if ((account instanceof Error)) Promise.reject(new Error('No account found')).catch(err => {return err});
     if (!account) Promise.reject(new Error('No account found')).catch(err => {return err});
     return Promise.resolve(account);
   } else if (data.userid) {
-    let account = await this.findOne({userid: data.userid}).then();
+    let account = await this.findOne({userid: data.userid}).then().catch(err => {Promise.reject(new Error(err))});
     if ((account instanceof Error)) Promise.reject(new Error('No account found')).catch(err => {return err});
     if (!account) Promise.reject(new Error('No account found')).catch(err => {return err});
     return Promise.resolve(account);
