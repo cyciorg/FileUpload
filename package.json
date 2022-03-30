@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "dependencies": {
     "aws-sdk": "^2.1066.0",
+    "clamscan": "^2.1.2",
     "compression": "^1.7.4",
     "dayjs": "^1.10.7",
     "dotenv": "^14.3.2",
@@ -21,7 +22,7 @@
     "passport-oauth2-refresh": "^2.1.0",
     "rate-limiter-flexible": "^2.3.6",
     "redis": "^4.0.3",
-    "tailwindcss": "^3.0.23",
+    "tailwindcss": "^1.1.4",
     "winston": "^3.5.1",
     "winston-mongodb": "^5.0.7"
   },

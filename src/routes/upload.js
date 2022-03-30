@@ -6,6 +6,8 @@ const fileSettings = require('../utils/fileSettings');
 const {models} = require('../db/connector');
 const mimeType = require('mime-types');
 const s3A = new AmazonCDN();
+const NodeClam = require('clamscan');
+const ClamScan = new NodeClam().init();
 
 async function post(req, res) {
     res.setHeader('Content-Type', 'text/text');
@@ -19,6 +21,8 @@ async function post(req, res) {
     if (!account.api_token || account.api_token !== userHeaderInformation['x-user-api_token']) return res.json({error: `Unauthorized request. User does not have an api token. Or api token does not match.`}); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`),
     
     form.parse(req, async (err, fields, files) => {
+        const { scannedFile, isInfected, viruses } = await clamscan.isInfected(files.cyciUploader.filepath);
+        if (isInfected) return res.json({error: `File is infected: ${viruses.join(', ')}`}); // add blacklisting later
         if (err) return res.json({error: `Error parsing form.`});
         if (!files.cyciUploader) return res.json({error: `No file provided.`});
         if (!files.cyciUploader.size) return res.json({error: `File is empty.`});
@@ -38,7 +42,7 @@ async function post(req, res) {
         // TODO: add file-type-specific validation
         // TODO: check if user has exceeded their quota
         // TODO: Anti-DDoS measures
-        // TODO: Anti-Viral measures
+        // TODO: Anti-Viral measures almost completed
         let fileUpload = await s3A.uploadImage(account, fileData, fileData.filePath);
         models.User.addImageOrFile(account, 
             {name: fileData.fileName, id: fileUpload.id, value: fileUpload.url, size: fileData.fileSize, type: fileData.fileExtension, created_at: fileUpload.fileDateUpload}, function(err, result) {

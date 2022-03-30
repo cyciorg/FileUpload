@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const session  = require('express-session');
 const app = express();
+const NodeClam = require('clamscan');
+const ClamScan = new NodeClam().init();
 //var helmet = require('helmet')
 const passport = require('passport');
 const path = require('path');
