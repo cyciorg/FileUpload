@@ -153,13 +153,22 @@ UserAccount.statics.getImagesOrFiles = function getImagesOrFiles(user, cb){
   });
 };
 
-UserAccount.statics.getRoles = function getRoles(user, cb){
+
+UserAccount.statics.getRoles = function getRoles(user, cb) {
   if (!user) return cb(new Error('No user provided'));
-  this.findOne({userid: user.userid}, function(err, result){
-    if (err) return cb(err);
-    if (!result) return cb(null, false);
-    return cb(null, result.roles);
-  });
+  if (user.email) {
+    this.findOne({ email: user.email }, function (err, result) {
+      if (err) return cb(err);
+      if (!result) return cb(null, false);
+      return cb(null, result.roles);
+    });
+  } else if (user.userid) {
+    this.findOne({ userid: user.userid }, function (err, result) {
+      if (err) return cb(err);
+      if (!result) return cb(null, false);
+      return cb(null, result.roles);
+    });
+  }
 };
 UserAccount.statics.purgeImagesOrFiles = function purgeImagesOrFiles(user, cb){
   if (!user) return cb(new Error('No user provided'));

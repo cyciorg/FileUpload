@@ -65,9 +65,11 @@
              <li>
                 <a href="#" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Settings</a>
              </li>
+             <% if (role.name == 'Owner' || role.name == 'Admin') { %> 
              <li>
-                <a href="#" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Temp</a>
+                <a href="/admin" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Admin</a>
              </li>
+             <% } %> 
              <li>
                 <a href="/api/v1/logout" class="text-sm hover:bg-red-400 text-white block px-4 py-2">Sign out</a>
              </li>

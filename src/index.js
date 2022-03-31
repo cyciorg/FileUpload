@@ -2,15 +2,21 @@ require('dotenv').config();
 const express = require('express');
 const session  = require('express-session');
 const app = express();
-const NodeClam = require('clamscan');
-const ClamScan = new NodeClam().init();
+// const NodeClam = require('clamscan');
+// const ClamScan = new NodeClam().init();
 //var helmet = require('helmet')
 const passport = require('passport');
 const path = require('path');
 const Mongoose = require('mongoose');
 const { connectDb, models } = require('./db/connector.js');
+const roles = require('./utils/roles.js');
+const AdminJS = require('adminjs')
+const AdminJSExpress = require('@adminjs/express')
+AdminJS.registerAdapter(require('@adminjs/mongoose'))
+
 var compression = require('compression');
 const checkAuth = require('./utils/checkAuth.js');
+const checkAuthPlusAdmin = require('./utils/checkAuthPlusAdmin.js');
 var routesArray = [require('./routes/index.js'), require('./routes/appendUserRole.js'), require('./routes/upload.js'), require('./routes/getConfig.js')];
 
 passport.serializeUser(function(user, done) {
@@ -58,41 +64,86 @@ function middleWaresOrSets() {
 }
 
 function routes() {
-  middleWaresOrSets();
-  app.get('/', routesArray[0].get.bind(this));
-  app.get('/api/v1/login', passport.authenticate('discord', {
-      scope: scopes,
-      prompt: prompt
-  }));
-  app.get('/api/v1/callback',
-      passport.authenticate('discord', {
-          failureRedirect: '/'
-      }),
-      function(req, res) {res.redirect('/')});
-  app.get('/api/v1/logout', function(req, res) {
-      req.logout();
-      res.redirect('/');
-  });
-  app.get('/api/v1/config', checkAuth, routesArray[3].get.bind(this));
-  app.post('/api/v1/upload', routesArray[2].post.bind(this));
-  app.get('/api/v1/append-role/:userId', routesArray[1].post.bind(this));
+    middleWaresOrSets();
+    app.get('/', routesArray[0].get.bind(this));
+    app.get('/api/v1/login', passport.authenticate('discord', {
+        scope: scopes,
+        prompt: prompt
+    }));
+    app.get('/api/v1/callback',
+        passport.authenticate('discord', {
+            failureRedirect: '/'
+        }),
+        function(req, res) {
+            res.redirect('/')
+        });
+    app.get('/api/v1/logout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+    });
+    app.get('/api/v1/config', checkAuth, routesArray[3].get.bind(this));
+    app.post('/api/v1/upload', routesArray[2].post.bind(this));
+    app.get('/api/v1/append-role/:userId', routesArray[1].post.bind(this));
 
-  connectDb().then(async (errMongo) => {
-    //if (errMongo) return console.log(errMongo);
-    // if (errMongo) {
-    //   // TODO: implement error handling
-    //   console.log(errMongo);
-    // } else {
-      app.listen(process.env.PORT, function(err) {
-          let {BruteForce} = require('./middleware/bruteForce.js');
-          
-          if (err) return console.log(err)
-          // let bruteforce = new BruteForce(Mongoose.connection);
-          // app.use(bruteforce.rateLimiterMiddleware2);
-          console.log(`Listening on port ${process.env.PORT}`)
-      })
-    //}
-  });
+    connectDb().then(async (errMongo) => {
+        const AdminPanel = new AdminJS({
+            resources: [{
+                resource: models.User,
+                options: {
+                    properties: {
+                        api_token: {
+                            type: 'string',
+                            isVisible: {
+                                list: true,
+                                edit: true,
+                                filter: false,
+                                show: false,
+                            },
+                        },
+                    },
+    
+                }
+            }, ],
+            branding: {
+                companyName: 'Cyci Org',
+                logo: 'https://cdn.cyci.rocks/576688747481743/22613_CyciRocks_Rainbowsvg.svg',
+                softwareBrothers: false,
+                favicon: 'https://cdn.cyci.rocks/576688747481743/22613_CyciRocks_Rainbowsvg.svg',
+            },
+            rootPath: '/admin',
+        })
+        const router = AdminJSExpress.buildRouter(AdminPanel, checkAuthPlusAdmin);
+            // authenticate: async (email) => {
+            //     const user = await models.User.findByEmailOrId({
+            //         email: email,
+            //         id: null
+            //     });
+            //     if (user) {
+            //         const matched = user.roles;
+            //         if (matched.includes('3')) {
+            //             return user
+            //         }
+            //     }
+            //     return false
+            // },
+            //cookiePassword: 'E7vixrYhWAW3T17pJXLh43DnlcVm7a0v96',
+        app.use(AdminPanel.options.rootPath, router)
+        //if (errMongo) return console.log(errMongo);
+        // if (errMongo) {
+        //   // TODO: implement error handling
+        //   console.log(errMongo);
+        // } else {
+        app.listen(process.env.PORT, function(err) {
+            let {
+                BruteForce
+            } = require('./middleware/bruteForce.js');
+
+            if (err) return console.log(err)
+            // let bruteforce = new BruteForce(Mongoose.connection);
+            // app.use(bruteforce.rateLimiterMiddleware2);
+            console.log(`Listening on port ${process.env.PORT}`)
+        })
+        //}
+    });
 }
-
 routes();

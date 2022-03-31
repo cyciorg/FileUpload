@@ -4,8 +4,10 @@
   "description": "",
   "main": "src/index.js",
   "dependencies": {
+    "@adminjs/express": "^4.1.0",
+    "@adminjs/mongoose": "^2.0.2",
+    "adminjs": "^5.7.5",
     "aws-sdk": "^2.1066.0",
-    "clamscan": "^2.1.2",
     "compression": "^1.7.4",
     "dayjs": "^1.10.7",
     "dotenv": "^14.3.2",
@@ -22,11 +24,12 @@
     "passport-oauth2-refresh": "^2.1.0",
     "rate-limiter-flexible": "^2.3.6",
     "redis": "^4.0.3",
-    "tailwindcss": "^1.1.4",
+    "tailwindcss": "^3.0.23",
     "winston": "^3.5.1",
     "winston-mongodb": "^5.0.7"
   },
   "scripts": {
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "css-compile": "tailwindcss build -i src/public/css/tailwind/tailwind.css -c src/public/css/tailwind/tailwind.config.js -o src/public/css/tailwind/tailwind.css",
     "css-minified": "tailwindcss build -i src/public/css/tailwind/tailwind.css -c src/public/css/tailwind/tailwind.config.js -o src/public/css/tailwind/tailwind.min.css --minify"
