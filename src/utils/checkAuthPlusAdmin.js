@@ -17,7 +17,7 @@ async function checkAuthPlusAdmin(req, res, next) {
     } else {
       res.redirect('/');
     }
-  } else return false;
+  } else res.redirect('/');
 }
 router.use(checkAuthPlusAdmin);
 module.exports = router;

@@ -90,6 +90,24 @@ function routes() {
             resources: [{
                 resource: models.User,
                 options: {
+                    actions: {
+                        delete: {
+                            guard: "Are you sure you wish to delete this record?"
+                        },
+                        regenerateToken: {
+                            actionType: 'record',
+                            icon: 'View',
+                            isVisible: true,
+                            component: './adminJsComponents/generateApiComp.jsx',
+                            handler: async (req, res, context) => {
+                                const user = context.record;
+                                const UserAc = context._admin.findResource('UserAccount')
+                                const crypto = require('crypto');
+                                user.param('api_token').value = crypto.randomBytes(32).toString('hex');
+                                return {record: user.toJSON(context.currentAdmin)}
+                            }
+                        }
+                    },
                     properties: {
                         api_token: {
                             type: 'string',
@@ -113,20 +131,6 @@ function routes() {
             rootPath: '/admin',
         })
         const router = AdminJSExpress.buildRouter(AdminPanel, checkAuthPlusAdmin);
-            // authenticate: async (email) => {
-            //     const user = await models.User.findByEmailOrId({
-            //         email: email,
-            //         id: null
-            //     });
-            //     if (user) {
-            //         const matched = user.roles;
-            //         if (matched.includes('3')) {
-            //             return user
-            //         }
-            //     }
-            //     return false
-            // },
-            //cookiePassword: 'E7vixrYhWAW3T17pJXLh43DnlcVm7a0v96',
         app.use(AdminPanel.options.rootPath, router)
         //if (errMongo) return console.log(errMongo);
         // if (errMongo) {

@@ -135,12 +135,12 @@ UserAccount.statics.appendRole = function appendRole(user, role, cb){
   });
 };
 
-UserAccount.statics.generateApiToken = function generateApiToken(user, cb){
-  if (!user) return cb(new Error('No user provided'));
+UserAccount.statics.generateApiToken = async function generateApiToken(user){
+  if (!user) return Promise.reject(new Error('No user provided'));
   user.api_token = crypto.randomBytes(32).toString('hex');
   user.save(function(err, result){
-    if (err) return cb(err);
-    return cb(null, result);
+    if (err) return Promise.reject('No data provided');
+    return Promise.resolve(result);
   });
 };
 
