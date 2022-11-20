@@ -1,13 +1,13 @@
 var AWS = require('aws-sdk'); 
+var dayjs = require('dayjs');
 AWS.config.update({accessKeyId: process.env.AWSS3_ID,secretAccessKey: process.env.AWSS3_KEY});
-s3 = new AWS.S3({apiVersion: new Date(Date.now())});
-const fs = require('fs');
-const promisify = require('util').promisify;
-const readFile = promisify(fs.readFile);
+s3 = new AWS.S3({apiVersion: dayjs().format('YYYYMMDD')});
+const { readFile } = require("fs/promises");
 var mime = require('mime-types')
 const createID = require('./createID');
 
-
+const { log } = require('console');
+var now = dayjs()
 let params = {
     Bucket: process.env.AWSS3_BUCKET,
     Key: "",
@@ -16,40 +16,62 @@ let params = {
     ACL: 'public-read',
     CacheControl: 'max-age=0',
   }
-  // working for local images
-
 class AmazonCDN {
     constructor() {
         this._params = params;
         this._s3 = s3;
     }
-    async uploadImage(user, imageName, path) {
+    async uploadImage(user, fileData, path) {
         const data = await readFile(path);
-        const dataS3 = this.uploadToS3(data, imageName, user)
+        const dataS3 = this.uploadToS3(data, fileData, user)
         await dataS3.upload;
-        return dataS3.file;
+        return {url: dataS3.file, id: dataS3.id, fileDateUpload: dataS3.fileDateUpload};
       };
-    uploadToS3(data, fileName, user) {
-        let newID = createID(5);
-        const fileExt = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length).toLowerCase();
+    uploadToS3(data, fileData, user) {
+        let newID = createID(10);
+        const fileExt = fileData.fileExtension;
         let mimeType = mime.lookup(fileExt);
-        this._params.Key = `${user}/${newID}_${fileName}`, this._params.Body = data,this._params.ContentType = mimeType;
+        
+        this._params.Key = `${user.userid}/${fileData.fileName}` ;
+        this._params.Body = data,this._params.ContentType = mimeType;
         return {
         upload: this._s3.upload(this._params).promise(),
-        file: process.env.SERVER + `/${this._params.Key}`
+        file: process.env.SERVER + `/${this._params.Key}`,
+        id: newID,
+        fileDateUpload: now
       }
     }
+    async listOfUserUploads(userId) {
+      let listOfFiles = [];
+      let params = {
+        Bucket: process.env.AWSS3_BUCKET,
+        Prefix: `${userId}/`
+      };
+      let data = await this._s3.listObjects(params).promise();
+      for (let i = 0; i < data.Contents.length; i++) {
+        listOfFiles.push(data.Contents[i].Key);
+      }
+      return listOfFiles;
+    }
+    async deleteFile(userId, fileName) {
+      let params = {
+        Bucket: process.env.AWSS3_BUCKET,
+        Key: `${userId}/${fileName}`
+      };
+      let data = await this._s3.deleteObject(params).promise();
+      return data;
+    }
+    
     /**
      * @param {Int} userId
+     * @returns {Boolean}
      */
-    async checkIfUserExists(userId) {
-      const paramFolder = {Bucket: process.env.AWSS3_BUCKET,Prefix: `${userId}/`}
-      s3.listObjectsV2(paramFolder, function(err, data) {
-        const folderExists = data.Contents.length > 0;
-          if (folderExists == true) {
-            return true;
-          } else return false;
-      })
+   async checkIfUserExists(userId) {
+      const paramFolder = {Bucket: process.env.AWSS3_BUCKET, Prefix: `${userId}/`}
+      let data = await this._s3.listObjectsV2(paramFolder).promise()
+      if(data.Contents.length > 0) return true;
+      else return false;
     }
-}
+  };
+
 module.exports = AmazonCDN;

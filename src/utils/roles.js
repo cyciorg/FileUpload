@@ -1,0 +1,1 @@
+module.exports = {USER: 0, PREMIUM: 1, MOD: 2, ADMIN: 3, OWNER: 4};

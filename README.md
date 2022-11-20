@@ -1,2 +1,0 @@
-# FileUpload
- Cyci File Uploader

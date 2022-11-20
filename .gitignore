@@ -116,6 +116,8 @@ testingimg.jpg
 
 # build dir
 build/
+css/
+metis-assets/
 
 # Conf files
 *.conf

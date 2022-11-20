@@ -1,42 +1,48 @@
 {
   "name": "fileupload",
   "version": "1.0.0",
-  "description": "File Uploader for CyciOrg",
-  "main": "ecosystem.config.js",
+  "description": "",
+  "main": "src/index.js",
+  "dependencies": {
+    "@adminjs/express": "^4.1.0",
+    "@adminjs/mongoose": "^3.0.1",
+    "adminjs": "^6.6.1",
+    "aws-sdk": "^2.1066.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "dayjs": "^1.10.7",
+    "dotenv": "^14.3.2",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "formidable": "^2.0.1",
+    "helmet": "^5.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "mime-types": "^2.1.34",
+    "mongoose": "^6.1.2",
+    "passport": "^0.6.0",
+    "passport-discord": "^0.1.4",
+    "passport-oauth2-refresh": "^2.1.0",
+    "rate-limiter-flexible": "^2.3.6",
+    "redis": "^4.0.3",
+    "tailwindcss": "^3.0.23",
+    "winston": "^3.5.1",
+    "winston-mongodb": "^5.0.7"
+  },
   "scripts": {
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "css-build": "node-sass --omit-source-map-url src/public/temp.scss src/public/main.css"
+    "css-compile": "tailwindcss build -i src/public/css/tailwind/tailwind.css -c src/public/css/tailwind/tailwind.config.js -o src/public/css/tailwind/tailwind.css",
+    "css-minified": "tailwindcss build -i src/public/css/tailwind/tailwind.css -c src/public/css/tailwind/tailwind.config.js -o src/public/css/tailwind/tailwind.min.css --minify"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cyciorg/FileUpload.git"
   },
-  "keywords": [
-    "File",
-    "Uploader"
-  ],
-  "author": "DopeDealers",
+  "author": "Phil",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cyciorg/FileUpload/issues"
   },
-  "homepage": "https://github.com/cyciorg/FileUpload#readme",
-  "dependencies": {
-    "aws-sdk": "^2.843.0",
-    "bcrypt": "^5.0.1",
-    "body-parser": "^1.19.0",
-    "bulma": "^0.9.2",
-    "dayjs": "^1.10.4",
-    "dotenv": "^8.2.0",
-    "ejs": "^3.1.6",
-    "express": "^4.17.1",
-    "express-robots-txt": "^0.5.0",
-    "formidable": "^1.2.2",
-    "mime-types": "^2.1.29",
-    "mysql2": "^2.2.5",
-    "node-sass": "^5.0.0",
-    "simple-encryptor": "^4.0.0",
-    "winston": "^3.3.3",
-    "wumpfetch": "^0.3.1"
-  }
+  "homepage": "https://github.com/cyciorg/FileUpload#readme"
 }

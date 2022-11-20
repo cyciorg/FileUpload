@@ -1,58 +1,114 @@
 <!DOCTYPE html>
-<html lang="en" style="margin:0;padding:0;height:100vh;overflow:hidden;">
-
-<head>
+<html lang="en">
+  <head>
+    <title><%= title %>  | Cyci</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
-    <meta property="og:site_name" content="Cyci CDN Center">
-    <meta property="og:description" content="Cyci's personal CDN Center">
-    <meta name="theme-color" content="#7289DA">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Cyci CDN" />
-    <meta property="og:image" content="https://cdn.cyci.rocks/576688747481743/22958_Showcase_Logorainbow.png" >
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-    <link rel='icon' href='https://cdn.cyci.rocks/576688747481743/31453_LOGOONLY_Showcase_LogoRainbow.svg'>
-    <link rel="stylesheet" href="https://cyci.rocks/main.css" type="text/css"/>
-    <script src="../js/fixMobile.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.18.12/dist/tsparticles.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cyci.rocks/css/tailwind/tailwind.min.css">
+    
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-tailwind.png">
+    <script src="js/main.js"></script>
+  </head>
+  <body class="antialiased bg-body text-body font-body">
+    <div class="">
 
-    <script>
-      tsParticles
-      .loadJSON('tsparticles','./partials/particles.json')
-      .then((container) => {
-      console.log("callback - tsparticles config loaded");
-      })
-        .catch((error) => {
-            console.error(error);
-        });
-    </script>
-
-    <title>
-      <%= title %>  | Cyci Uploader
-    </title>
-</head>
-<body>
-    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-      <a role="button" class="navbar-burger" data-target="navbarMain" aria-label="menu" aria-expanded="false">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-        <div id="navbarMain" class="navbar-menu">
-          <div class="navbar-brand">
+<section><div class="container px-4 mx-auto">
+    <nav class="flex justify-between py-6 items-center"><a class="text-3xl font-semibold leading-none" href="#">
+      <img class="h-16" src="https://cdn.cyci.rocks/576688747481743/22613_CyciRocks_Rainbowsvg.svg" alt="" width="auto"></a>
+      <div class="lg:hidden">
+        <button class="navbar-burger flex items-center py-2 px-3 text-blue-600 hover:text-blue-700 rounded border border-blue-200 hover:border-blue-300">
+          <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Mobile menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path></svg></button>
+      </div>
+      <ul class="hidden lg:flex lg:w-auto lg:space-x-12 ml-12 mr-auto"><li><a class="text-sm text-blueGray-400 hover:text-blueGray-500" href="#">Pricing</a></li>
+        <li><a class="text-sm text-blueGray-400 hover:text-blueGray-500" href="#">Company</a></li>
+        <li><a class="text-sm text-blueGray-400 hover:text-blueGray-500" href="#">About Us</a></li>
+        <li><a class="text-sm text-blueGray-400 hover:text-blueGray-500" href="#">Gallery</a></li>
+      </ul>
+      <% if (isAuthenticated) { %>
+        <% if (user.premium_type == 2) { %>
+          <button class="flex items-center border-[#f3e3df] inline-block px-6 py-2 bg-gray-200 rounded text-sm px-4 py-2.5" data-dropdown-toggle="dropdown" style="background-repeat: no-repeat;background-size: 100% auto; background-image: url('https://cdn.discordapp.com/banners/<%- user.id %>/<%- user.banner %>.gif'); box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);">
+        <% } else { %>
+          <button class="flex items-center border-[#f3e3df] inline-block px-6 py-2 bg-gray-200 rounded text-sm px-4 py-2.5" data-dropdown-toggle="dropdown" style="background-repeat: no-repeat;background-size: 100% auto; background-image: url('https://cdn.discordapp.com/banners/<%- user.id %>/<%- user.banner %>.jpeg'); box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);">
+        <% } %>
+          <div class="mr-3">
+             <p class="text-sm text-white"><%- user.username %>#<%- user.discriminator %></p>
             
+             <p class="text-sm <%- role.color %>"><%- role.name %></p>
           </div>
-            <div class="navbar-start">
-              <a class="<%= title == 'Index' ? 'navbar-item is-link center is-active' : 'navbar-item center' %>" href="/">
-                Home
-              </a>
-              <a id="header-logo" href="https://cyci.rocks"></a>
-              <a class="<%= title == 'Shortener' ? 'navbar-item center is-active' : 'navbar-item center' %>" href="/shorten" style="text-decoration: none;">
-                Shortener
-              </a>
+          <div class="mr-2">
+            <!-- simple work around will fix later -->
+            <% if (user.premium_type == 2) { %>
+              <img class="w-10 h-10 rounded-full border border-green-200 object-cover object-right" src="https://cdn.discordapp.com/avatars/<%- user.id %>/<%- user.avatar %>.gif" alt="">
+            <% } else { %>
+             <img class="w-10 h-10 rounded-full border border-green-200 object-cover object-right" src="https://cdn.discordapp.com/avatars/<%- user.id %>/<%- user.avatar %>.jpeg" alt="">
+            <% } %>
             </div>
+          <span>
+             <svg class="text-gray-400" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.08335 0.666657C8.75002 0.333323 8.25002 0.333323 7.91669 0.666657L5.00002 3.58332L2.08335 0.666657C1.75002 0.333323 1.25002 0.333323 0.916687 0.666657C0.583354 0.99999 0.583354 1.49999 0.916687 1.83332L4.41669 5.33332C4.58335 5.49999 4.75002 5.58332 5.00002 5.58332C5.25002 5.58332 5.41669 5.49999 5.58335 5.33332L9.08335 1.83332C9.41669 1.49999 9.41669 0.99999 9.08335 0.666657Z" fill="currentColor"></path>
+             </svg>
+          </span>
+       </button>
+       <!-- Dropdown menu -->
+       <div class="hidden bg-gray-500 text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown">
+          <div class="px-4 py-3">
+             <span class="block text-sm text-white">Signed in</span>
+             <span class="block text-sm font-mediumtruncate text-gray-200"><%- user.email %></span>
+          </div>
+          <ul class="py-1" aria-labelledby="dropdown">
+             <li>
+                <a href="#" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Dashboard</a>
+             </li>
+             <li>
+                <a href="#" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Settings</a>
+             </li>
+              <li>
+                <a href="/api/v1/config" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Generate ShareX Config's</a>
+              </li>
+             <% if (role.name == 'Owner' || role.name == 'Admin') { %> 
+             <li>
+                <a href="/admin" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Admin</a>
+             </li>
+             <% } %> 
+             <li>
+                <a href="/api/v1/logout" class="text-sm hover:bg-red-400 text-white block px-4 py-2">Sign out</a>
+             </li>
+          </ul>
+       </div>
+          <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
+      <% } else { %>
+        <div class="hidden lg:block"><a class="mr-2 inline-block py-3 text-xs text-blue-600 hover:text-blue-700 font-semibold leading-none border border-blue-200 hover:border-blue-300 rounded px-8" href="/api/v1/login">Log In</a></div>
+      <% } %>
+    </nav></div>
+    <div class="hidden navbar-menu fixed top-0 left-0 bottom-0 w-5/6 max-w-sm z-50">
+      <div class="navbar-backdrop fixed inset-0 bg-blueGray-800 opacity-25"></div>
+      <nav class="relative flex flex-col py-6 px-6 w-full h-full bg-white border-r overflow-y-auto"><div class="flex items-center mb-8">
+        <a class="mr-auto text-3xl font-semibold leading-none" href="#">
+          <img class="h-10" src="https://cdn.cyci.rocks/576688747481743/22613_CyciRocks_Rainbowsvg.svg" alt="" width="auto"></a>
+        <button class="navbar-close">
+          <svg class="h-6 w-6 text-blueGray-400 cursor-pointer hover:text-blueGray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
         </div>
-    </nav>
-
-    <div id="tsparticles"></div>
+        <div>
+          <ul><li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">Product</a></li>
+            <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">Company</a></li>
+            <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">About Us</a></li>
+            <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">Gallery</a></li>
+          </ul><div class="mt-4 pt-6 border-t border-blueGray-100"><a class="block px-4 py-3 mb-3 text-xs text-center font-semibold leading-none bg-blue-600 hover:bg-blue-700 text-white rounded" href="#">Sign Up</a><a class="block px-4 py-3 mb-2 text-xs text-center text-blue-600 hover:text-blue-700 font-semibold leading-none border border-blue-200 hover:border-blue-300 rounded" href="#">Log In</a></div>
+        </div>
+        <div class="mt-auto">
+          <p class="my-4 text-xs text-blueGray-400">
+            <span>Get in Touch</span>
+            <a class="text-blue-600 hover:text-blue-600 underline" href="#">contact@cyci.org</a>
+          </p>
+          <a class="inline-block px-1" href="#">
+            <img src="metis-assets/icons/facebook-blue.svg" alt=""></a>
+          <a class="inline-block px-1" href="#">
+            <img src="metis-assets/icons/twitter-blue.svg" alt=""></a>
+          <a class="inline-block px-1" href="#">
+            <img src="metis-assets/icons/instagram-blue.svg" alt=""></a>
+        </div>
+      </nav></div>
+  </section>
