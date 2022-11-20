@@ -135,12 +135,12 @@ UserAccount.statics.appendRole = function appendRole(user, role, cb){
   });
 };
 
-UserAccount.statics.generateApiToken = async function generateApiToken(user){
-  if (!user) return Promise.reject(new Error('No user provided'));
+UserAccount.statics.generateApiToken = function generateApiToken(user, cb){
+  if (!user) return cb(new Error('No user provided'));
   user.api_token = crypto.randomBytes(32).toString('hex');
   user.save(function(err, result){
-    if (err) return Promise.reject('No data provided');
-    return Promise.resolve(result);
+    if (err) return cb(err);
+    return cb(null, result);
   });
 };
 
@@ -153,22 +153,13 @@ UserAccount.statics.getImagesOrFiles = function getImagesOrFiles(user, cb){
   });
 };
 
-
-UserAccount.statics.getRoles = function getRoles(user, cb) {
+UserAccount.statics.getRoles = function getRoles(user, cb){
   if (!user) return cb(new Error('No user provided'));
-  if (user.email) {
-    this.findOne({ email: user.email }, function (err, result) {
-      if (err) return cb(err);
-      if (!result) return cb(null, false);
-      return cb(null, result.roles);
-    });
-  } else if (user.userid) {
-    this.findOne({ userid: user.userid }, function (err, result) {
-      if (err) return cb(err);
-      if (!result) return cb(null, false);
-      return cb(null, result.roles);
-    });
-  }
+  this.findOne({userid: user.userid}, function(err, result){
+    if (err) return cb(err);
+    if (!result) return cb(null, false);
+    return cb(null, result.roles);
+  });
 };
 UserAccount.statics.purgeImagesOrFiles = function purgeImagesOrFiles(user, cb){
   if (!user) return cb(new Error('No user provided'));
@@ -201,19 +192,19 @@ UserAccount.statics.addImageOrFile = function addImageOrFile(user, data, cb){
     });
   });
 };
-
 UserAccount.statics.findOrCreate = function findOrCreate(profile, cb){
   this.findOne({userid : profile.id},function(err,result){ 
-      if(!result){
-        var userObj = new UserAccount({
+    if (!result) {
+       var userObj = new exportUser({
           userid: profile.id,
           email: profile.email,
+          avatar: profile.avatar,
           api_token: '',
           roles: [0],
           data: [],
           account_type: '',
           date: now
-        })
+        });
         userObj.save(function(err, result){
           if (err) return cb(err);
           return cb(null, result);
