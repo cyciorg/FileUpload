@@ -50,7 +50,7 @@ async function post(req, res) {
         let fileUpload = await s3A.uploadImage(account, fileData, fileData.filePath);
         models.User.addImageOrFile(account, 
             {name: fileData.fileName, id: fileUpload.id, value: fileUpload.url, size: fileData.fileSize, type: fileData.fileExtension, created_at: fileUpload.fileDateUpload}, function(err, result) {
-                if (err) return res.json({error: `Error adding file to database.`});
+                if (err) return res.json({error: `Error adding file to database.`}) && console.log(err)
                 return res.json({cyciUploader: `https://${fileUpload.url}`}).status(200)
             });
     });
