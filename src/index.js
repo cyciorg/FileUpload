@@ -52,7 +52,6 @@ function middleWaresOrSets() {
   refresh.use(discordStrat);
   app.use(compression());
   const cookieParser = require('cookie-parser')
-  const session = require('express-session')
   app.use(cookieParser());
   app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
   app.use(passport.initialize());
