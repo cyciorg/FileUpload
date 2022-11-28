@@ -27,6 +27,7 @@ async function post(req, res) {
     form.parse(req, async (err, fields, files) => {
        // const { scannedFile, isInfected, viruses } = await clamscan.isInfected(files.cyciUploader.filepath);
        // if (isInfected) return res.json({error: `File is infected: ${viruses.join(', ')}`}); // add blacklisting later
+        console.log(files)
         if (err) return res.json({error: `Error parsing form.`});
         if (!files.cyciUploader) return res.json({error: `No file provided.`});
         if (!files.cyciUploader.size) return res.json({error: `File is empty.`});
