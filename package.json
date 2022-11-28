@@ -19,7 +19,7 @@
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
     "mime-types": "^2.1.34",
-    "mongoose": "^6.1.2",
+    "mongoose": "^6.7.3",
     "passport": "^0.6.0",
     "passport-discord": "^0.1.4",
     "passport-oauth2-refresh": "^2.1.0",
