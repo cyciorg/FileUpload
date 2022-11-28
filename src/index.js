@@ -67,13 +67,12 @@ function routes() {
     app.get('/api/v1/login', passport.authenticate('discord', {
         scope: scopes,
         prompt: prompt
-    }), function(req, res) {console.log(req)});
+    }));
     app.get('/api/v1/callback',
         passport.authenticate('discord', {
             failureRedirect: '/'
         }),
         function (req, res) {
-            console.log(req)
             res.redirect('/')
         });
     app.get('/api/v1/logout', function(req, res) {
@@ -148,7 +147,7 @@ function routes() {
             // app.use(bruteforce.rateLimiterMiddleware2);
             
             console.log(`Listening on port ${process.env.PORT}`)
-            console.log(`Process client env: ${process.env.DISCORD_CLIENT_URL} ${process.env.DISCORD_CLIENT_SECRET} ${process.env.DISCORD_CLIENT_ID}`)
+        
         });
         //}
     });
