@@ -19,9 +19,11 @@
     <nav class="flex justify-between py-6 items-center"><a class="text-3xl font-semibold leading-none" href="#">
       <img class="h-16" src="https://cdn.cyci.rocks/576688747481743/22613_CyciRocks_Rainbowsvg.svg" alt="" width="auto"></a>
       <div class="lg:hidden">
+        <% if (!isAuthenticated) { %>
         <button class="navbar-burger flex items-center py-2 px-3 text-blue-600 hover:text-blue-700 rounded border border-blue-200 hover:border-blue-300">
           <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Mobile menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path></svg></button>
-      </div>
+        <% } %>
+        </div>
       <ul class="hidden lg:flex lg:w-auto lg:space-x-12 ml-12 mr-auto"><li><a class="text-sm text-blueGray-400 hover:text-blueGray-500" href="#">Pricing</a></li>
         <li><a class="text-sm text-blueGray-400 hover:text-blueGray-500" href="#">Company</a></li>
         <li><a class="text-sm text-blueGray-400 hover:text-blueGray-500" href="#">About Us</a></li>
@@ -96,7 +98,7 @@
             <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">Company</a></li>
             <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">About Us</a></li>
             <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">Gallery</a></li>
-          </ul><div class="mt-4 pt-6 border-t border-blueGray-100"><a class="block px-4 py-3 mb-3 text-xs text-center font-semibold leading-none bg-blue-600 hover:bg-blue-700 text-white rounded" href="#">Sign Up</a><a class="block px-4 py-3 mb-2 text-xs text-center text-blue-600 hover:text-blue-700 font-semibold leading-none border border-blue-200 hover:border-blue-300 rounded" href="/api/v1/login">Log In</a></div>
+          </ul><div class="mt-4 pt-6 border-t border-blueGray-100"><a class="block px-4 py-3 mb-2 text-xs text-center text-blue-600 hover:text-blue-700 font-semibold leading-none border border-blue-200 hover:border-blue-300 rounded" href="/api/v1/login">Log In</a></div>
         </div>
         <div class="mt-auto">
           <p class="my-4 text-xs text-blueGray-400">
