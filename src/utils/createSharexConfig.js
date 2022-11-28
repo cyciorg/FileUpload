@@ -16,7 +16,7 @@ class ShareXConfig {
             "Headers": {
               "x-user-email": this._user.email,
               "x-user-id": this._user.userid,
-              "x-user-api_token": this._user.api_token
+              "x-user-api-token": this._user.api_token
             },
             "Body": "MultipartFormData",
             "FileFormName": "cyciUploader",
