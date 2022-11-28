@@ -16,11 +16,11 @@ async function post(req, res) {
     //let ip = req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.realAddress || req.connection.remoteAddress,who = req.headers['user-agent'] || "Undefined (1.0.0)";
     if (!userHeaderInformation['x-user-email'] || !userHeaderInformation['x-user-id'] && !userHeaderInformation['x-user-api_token']) return res.json({error: `Unauthorized request`}); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`), 
     let account = await models.User.findByEmailOrId({ email: userHeaderInformation['x-user-email'], userid: userHeaderInformation['x-user-id'] }).then();
-    console.log(account)
     if (account.is_banned) return res.json({error: `Unauthorized request. user is banned.`});
     if ((account instanceof Error)) return res.json({error: `Unauthorized request. user does not exist.`}); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`),
-    console.log(userHeaderInformation + " " + account.api_token);
-    if (!account.api_token || account.api_token !== userHeaderInformation['x-user-api_token']) return res.json({ error: `Unauthorized request. User does not have an api token. Or api token does not match.` }); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`),
+    console.log(userHeaderInformation['x-user-api_token'])
+    if (account.api_token !== userHeaderInformation['x-user-api_token']) return res.json({ error: `Unauthorized request. user api token is invalid.` }); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`),
+    //if (!account.api_token || account.api_token !== userHeaderInformation['x-user-api_token']) return res.json({ error: `Unauthorized request. User does not have an api token. Or api token does not match.` }); // logger.error(`Unauthorized request to /upload/ by ${ip} - ${who}`),
     
     form.parse(req, async (err, fields, files) => {
        // const { scannedFile, isInfected, viruses } = await clamscan.isInfected(files.cyciUploader.filepath);
