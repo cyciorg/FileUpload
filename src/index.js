@@ -148,6 +148,7 @@ function routes() {
             // app.use(bruteforce.rateLimiterMiddleware2);
             
             console.log(`Listening on port ${process.env.PORT}`)
+            console.log(`Process client env: ${process.env.DISCORD_CLIENT_URL} ${process.env.DISCORD_CLIENT_SECRET} ${process.env.DISCORD_CLIENT_ID}`)
         });
         //}
     });
