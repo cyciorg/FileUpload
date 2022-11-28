@@ -51,8 +51,6 @@ function middleWaresOrSets() {
   passport.use(discordStrat);
   refresh.use(discordStrat);
   app.use(compression());
-  const cookieParser = require('cookie-parser')
-  app.use(cookieParser());
   app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
   app.use(passport.initialize());
   app.use(passport.session());
@@ -69,12 +67,13 @@ function routes() {
     app.get('/api/v1/login', passport.authenticate('discord', {
         scope: scopes,
         prompt: prompt
-    }));
+    }), function(req, res) {console.log(req)});
     app.get('/api/v1/callback',
         passport.authenticate('discord', {
             failureRedirect: '/'
         }),
-        function(req, res) {
+        function (req, res) {
+            console.log(req)
             res.redirect('/')
         });
     app.get('/api/v1/logout', function(req, res) {
