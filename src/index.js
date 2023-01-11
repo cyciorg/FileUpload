@@ -1,14 +1,27 @@
 require('dotenv').config();
 const express = require('express');
-const session  = require('express-session');
+const session = require('express-session');
+var RateLimit = require('express-rate-limit');
+var MongoStore = require('rate-limit-mongo');
+const Sentry = require('@sentry/node');
+const Tracing = require("@sentry/tracing");
 const app = express();
-// const NodeClam = require('clamscan');
-// const ClamScan = new NodeClam().init();
-//var helmet = require('helmet')
+var limiter = new RateLimit({
+    store: new MongoStore({
+        uri: process.env.MONGO_URI,
+        expireTimeMs: 15 * 60 * 1000,
+        errorHandler: console.error.bind(null, 'rate-limit-mongo')
+    }),
+    message: "Too many requests, please try again later.",
+    max: 100,
+    windowMs: 15 * 60 * 1000
+});
 const passport = require('passport');
 const path = require('path');
 const Mongoose = require('mongoose');
-const { connectDb } = require('./db/connector.js');
+const {
+    connectDb
+} = require('./db/connector.js');
 const User = require('./db/User.schema.js');
 const roles = require('./utils/roles.js');
 const AdminJS = require('adminjs')
@@ -21,16 +34,16 @@ const checkAuthPlusAdmin = require('./utils/checkAuthPlusAdmin.js');
 var routesArray = [require('./routes/index.js'), require('./routes/appendUserRole.js'), require('./routes/upload.js'), require('./routes/getConfig.js')];
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+    done(null, user);
 });
 passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+    done(null, obj);
 });
 
-var DiscordStrategy = require('passport-discord').Strategy
-  , refresh = require('passport-oauth2-refresh')
-  , scopes = ['identify', 'email', 'guilds', 'guilds.join']
-  , prompt = 'consent';
+var DiscordStrategy = require('passport-discord').Strategy,
+    refresh = require('passport-oauth2-refresh'),
+    scopes = ['identify', 'email', 'guilds', 'guilds.join'],
+    prompt = 'consent';
 
 var discordStrat = new DiscordStrategy({
     clientID: process.env.DISCORD_CLIENT_ID,
@@ -38,9 +51,9 @@ var discordStrat = new DiscordStrategy({
     callbackURL: process.env.DISCORD_CALLBACK_URL,
     scope: scopes,
     prompt: prompt
-},function(accessToken, refreshToken, profile, cb) {
-    profile.refreshToken = refreshToken; // store this for later refreshes
-    User.findOrCreate(profile, function (err, user) {
+}, function(accessToken, refreshToken, profile, cb) {
+    profile.refreshToken = refreshToken;
+    User.findOrCreate(profile, function(err, user) {
         if (err) return cb(err);
         return cb(profile, user);
     });
@@ -48,17 +61,34 @@ var discordStrat = new DiscordStrategy({
 });
 
 function middleWaresOrSets() {
-  passport.use(discordStrat);
-  refresh.use(discordStrat);
-  app.use(compression());
-  app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
-  app.use(passport.initialize());
-  app.use(passport.session());
+    passport.use(discordStrat);
+    refresh.use(discordStrat);
+    app.use(compression());
+    app.use(session({
+        secret: 'secret',
+        resave: false,
+        saveUninitialized: false
+    }));
+    app.use(passport.initialize());
+    app.use(passport.session());
 
-  app.set('trust proxy', 1);
-  app.set('view engine', 'ejs');
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.use(express.static(path.join(__dirname, 'views'), {extensions: ['css']}));
+    app.set('trust proxy', 1);
+    app.set('view engine', 'ejs');
+    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.static(path.join(__dirname, 'views'), {
+        extensions: ['css']
+    }));
+    Sentry.init({
+        dsn: process.env.SENTRY_DSN,
+        integrations: [
+            new Sentry.Integrations.Http({tracing: true}),
+            new Tracing.Integrations.Express({app}),
+    ],
+        tracesSampleRate: 1.0,
+    });
+    app.use(Sentry.Handlers.requestHandler());
+    app.use(Sentry.Handlers.tracingHandler());
+    app.use(Sentry.Handlers.errorHandler());
 }
 
 function routes() {
@@ -72,18 +102,21 @@ function routes() {
         passport.authenticate('discord', {
             failureRedirect: '/'
         }),
-        function (req, res) {
+        function(req, res) {
             res.redirect('/')
         });
     app.get('/api/v1/logout', function(req, res) {
-       req.logout(function(err) {
-        if (err) { return next(err); }
+        req.logout(function(err) {
+            if (err) {
+                return next(err);
+            }
             res.redirect('/');
         });
     });
     app.get('/api/v1/config', checkAuth, routesArray[3].get.bind(this));
     app.post('/api/v1/upload', routesArray[2].post.bind(this));
-    app.get('/api/v1/append-role/:userId', routesArray[1].post.bind(this));
+    app.get('/api/v1/append-role/:userId', limiter, routesArray[1].post.bind(this));
+    app.get('/api/v1/reset-api', routesArray[1].get.bind(this));
 
     connectDb().then(async (errMongo) => {
         const AdminPanel = new AdminJS({
@@ -104,7 +137,9 @@ function routes() {
                                 const UserAc = context._admin.findResource('UserAccount')
                                 const crypto = require('crypto');
                                 user.param('api_token').value = crypto.randomBytes(32).toString('hex');
-                                return { record: user.toJSON(context.currentAdmin) }
+                                return {
+                                    record: user.toJSON(context.currentAdmin)
+                                }
                             }
                         }
                     },
@@ -119,9 +154,9 @@ function routes() {
                             },
                         },
                     },
-    
+
                 }
-            },],
+            }, ],
             branding: {
                 companyName: 'Cyci Org',
                 logo: 'https://cdn.cyci.rocks/576688747481743/22613_CyciRocks_Rainbowsvg.svg',
@@ -132,24 +167,16 @@ function routes() {
         })
         const router = AdminJSExpress.buildRouter(AdminPanel, checkAuthPlusAdmin);
         app.use(AdminPanel.options.rootPath, router)
-        //if (errMongo) return console.log(errMongo);
-        // if (errMongo) {
-        //   // TODO: implement error handling
-        //   console.log(errMongo);
-        // } else {
-        app.listen(process.env.PORT, function (err) {
+        app.listen(process.env.PORT, function(err) {
             let {
                 BruteForce
             } = require('./middleware/bruteForce.js');
 
             if (err) return console.log(err)
-            // let bruteforce = new BruteForce(Mongoose.connection);
-            // app.use(bruteforce.rateLimiterMiddleware2);
-            
+
             console.log(`Listening on port ${process.env.PORT}`)
-        
+
         });
-        //}
     });
 }
 routes();
