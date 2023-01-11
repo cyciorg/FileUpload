@@ -69,7 +69,6 @@
              </li>
               <li>
                 <a href="/api/v1/config" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Generate ShareX Config's</a>
-                <% console.log(role) %> 
               </li>
              <% if (role.name == 'Owner' || role.name == 'Admin') { %> 
              <li>
@@ -95,22 +94,16 @@
           <svg class="h-6 w-6 text-blueGray-400 cursor-pointer hover:text-blueGray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
         </div>
         <div>
-          <ul>
-            <% if (isAuthenticated) %> <li>
-            <a class="mb-1" href="/api/v1/config" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Generate ShareX Config's</a>
-          </li>
-              <% if (role.name=='Owner' || role.name=='Admin' ) { %>
-            <li>
-              <a class="mb-1" href="/admin" class="text-sm hover:bg-red-100 text-red-400 block px-4 py-2">Admin</a>
-            </li>
-              <% } %>
-            <% } %> 
+          <ul><li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">Product</a></li>
+            <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">Company</a></li>
+            <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">About Us</a></li>
+            <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">Gallery</a></li>
           </ul><div class="mt-4 pt-6 border-t border-blueGray-100"><a class="block px-4 py-3 mb-2 text-xs text-center text-blue-600 hover:text-blue-700 font-semibold leading-none border border-blue-200 hover:border-blue-300 rounded" href="/api/v1/login">Log In</a></div>
         </div>
         <div class="mt-auto">
           <p class="my-4 text-xs text-blueGray-400">
             <span>Get in Touch</span>
-            <a class="text-blue-600 hover:text-blue-600 underline" href="mailto:contact@cyci.org">contact@cyci.org</a>
+            <a class="text-blue-600 hover:text-blue-600 underline" href="#">contact@cyci.org</a>
           </p>
           <a class="inline-block px-1" href="#">
             <img src="metis-assets/icons/facebook-blue.svg" alt=""></a>
