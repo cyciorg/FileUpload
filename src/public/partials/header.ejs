@@ -32,7 +32,7 @@
       <% if (isAuthenticated) { %>
         <% if (user.premium_type == 2) { %>
           <button class="flex items-center border-[#f3e3df] inline-block px-6 py-2 bg-gray-200 rounded text-sm px-4 py-2.5" data-dropdown-toggle="dropdown" style="background-repeat: no-repeat;background-size: 100% auto; background-image: url('https://cdn.discordapp.com/banners/<%- user.id %>/<%- user.banner %>.gif'); box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);">
-        <% } else { %>
+        <li% } else { %>
           <button class="flex items-center border-[#f3e3df] inline-block px-6 py-2 bg-gray-200 rounded text-sm px-4 py-2.5" data-dropdown-toggle="dropdown" style="background-repeat: no-repeat;background-size: 100% auto; background-image: url('https://cdn.discordapp.com/banners/<%- user.id %>/<%- user.banner %>.jpeg'); box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);">
         <% } %>
           <div class="mr-3">
@@ -70,6 +70,7 @@
               <li>
                 <a href="/api/v1/config" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">Generate ShareX Config's</a>
               </li>
+              <li><a href="https://getsharex.com/downloads" class="text-sm hover:bg-gray-100 text-white block px-4 py-2">>Get Sharex</a></li>
              <% if (role.name == 'Owner' || role.name == 'Admin') { %> 
              <li>
                 <a href="/admin" class="text-sm hover:bg-red-100 text-red-400 block px-4 py-2">Admin</a>
@@ -98,6 +99,7 @@
             <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">Company</a></li>
             <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">About Us</a></li>
             <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="#">Gallery</a></li>
+            <li class="mb-1"><a class="block p-4 text-sm text-blueGray-500 hover:bg-blue-50 hover:text-blue-600" href="https://getsharex.com/downloads">Get Sharex</a></li>
           </ul><div class="mt-4 pt-6 border-t border-blueGray-100"><a class="block px-4 py-3 mb-2 text-xs text-center text-blue-600 hover:text-blue-700 font-semibold leading-none border border-blue-200 hover:border-blue-300 rounded" href="/api/v1/login">Log In</a></div>
         </div>
         <div class="mt-auto">
