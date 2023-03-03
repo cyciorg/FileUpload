@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+
 var MongoStore = require('rate-limit-mongo');
 const Sentry = require('@sentry/node');
 const Tracing = require("@sentry/tracing");
@@ -105,7 +106,7 @@ function routes() {
     });
     app.get('/api/v1/config', checkAuth, routesArray[3].get.bind(this));
     app.post('/api/v1/upload', routesArray[2].post.bind(this));
-    app.get('/api/v1/append-role/:userId', limiter, routesArray[1].post.bind(this));
+    //app.get('/api/v1/append-role/:userId', limiter, routesArray[1].post.bind(this));
     app.get('/api/v1/reset-api', routesArray[1].get.bind(this));
 
     connectDb().then(async (errMongo) => {
