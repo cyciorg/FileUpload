@@ -1,12 +1,21 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-
+var RateLimit = require('express-rate-limit');
 var MongoStore = require('rate-limit-mongo');
 const Sentry = require('@sentry/node');
 const Tracing = require("@sentry/tracing");
 const app = express();
-
+var limiter = new RateLimit({
+    store: new MongoStore({
+        uri: process.env.MONGO_URI,
+        expireTimeMs: 15 * 60 * 1000,
+        errorHandler: console.error.bind(null, 'rate-limit-mongo')
+    }),
+    message: "Too many requests, please try again later.",
+    max: 100,
+    windowMs: 15 * 60 * 1000
+});
 const passport = require('passport');
 const path = require('path');
 const Mongoose = require('mongoose');
@@ -106,7 +115,7 @@ function routes() {
     });
     app.get('/api/v1/config', checkAuth, routesArray[3].get.bind(this));
     app.post('/api/v1/upload', routesArray[2].post.bind(this));
-    //app.get('/api/v1/append-role/:userId', limiter, routesArray[1].post.bind(this));
+    app.get('/api/v1/append-role/:userId', limiter, routesArray[1].post.bind(this));
     app.get('/api/v1/reset-api', routesArray[1].get.bind(this));
 
     connectDb().then(async (errMongo) => {
