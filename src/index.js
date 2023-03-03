@@ -104,7 +104,7 @@ function routes() {
     });
     app.get('/api/v1/config', checkAuth, routesArray[3].get.bind(this));
     app.post('/api/v1/upload', routesArray[2].post.bind(this));
-    app.get('/api/v1/reset-api', routesArray[1].get.bind(this));
+    //app.get('/api/v1/reset-api', routesArray[1].get.bind(this));
 
     connectDb().then(async (errMongo) => {
         const AdminPanel = new AdminJS({
