@@ -5,16 +5,6 @@ var MongoStore = require('rate-limit-mongo');
 const Sentry = require('@sentry/node');
 const Tracing = require("@sentry/tracing");
 const app = express();
-var limiter = new RateLimit({
-    store: new MongoStore({
-        uri: process.env.MONGO_URI,
-        expireTimeMs: 15 * 60 * 1000,
-        errorHandler: console.error.bind(null, 'rate-limit-mongo')
-    }),
-    message: "Too many requests, please try again later.",
-    max: 100,
-    windowMs: 15 * 60 * 1000
-});
 const passport = require('passport');
 const path = require('path');
 const Mongoose = require('mongoose');
