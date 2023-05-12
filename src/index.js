@@ -20,6 +20,7 @@ AdminJS.registerAdapter(require('@adminjs/mongoose'))
 var compression = require('compression');
 const checkAuth = require('./utils/checkAuth.js');
 const checkAuthPlusAdmin = require('./utils/checkAuthPlusAdmin.js');
+const { log } = require('console');
 var routesArray = [require('./routes/index.js'), require('./routes/appendUserRole.js'), require('./routes/upload.js'), require('./routes/getConfig.js')];
 
 passport.serializeUser(function(user, done) {
@@ -165,6 +166,6 @@ function routes() {
             console.log(`Listening on port ${process.env.PORT}`)
 
         });
-    });
+    }).catch(err => {log(err)})
 }
 routes();
