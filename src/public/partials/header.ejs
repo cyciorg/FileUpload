@@ -38,7 +38,7 @@
           <button class="flex items-center border-[#f3e3df] inline-block px-6 py-2 bg-gray-200 rounded text-sm px-4 py-2.5" data-dropdown-toggle="dropdown" style="background-repeat: no-repeat;background-size: 100% auto; background-image: url('https://cdn.discordapp.com/banners/<%- user.id %>/<%- user.banner %>.jpeg'); box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);">
         <% } %>
           <div class="mr-3">
-             <p class="text-sm text-white"><%- user.username %>#<%- user.discriminator %></p>
+             <p class="text-sm text-white"><%- user.displayname %> | <%- user.username %></p>
             
              <p class="text-sm <%- role.color %>"><%- role.name %></p>
           </div>
